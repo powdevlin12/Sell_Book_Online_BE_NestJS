@@ -1,4 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Customer } from './customer.entity';
 
 @Entity({ name: 'customer_type' })
@@ -9,6 +15,6 @@ export class CustomerType {
   @Column({ type: 'nvarchar', length: 200 })
   name: string;
 
-  @OneToMany(() => Customer, (customer) => customer.customer_type)
+  @ManyToOne(() => Customer, (customer) => customer.customerType)
   customers: Customer[];
 }

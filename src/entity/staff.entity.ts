@@ -2,10 +2,12 @@ import {
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Account } from './account.entity';
+import { Promotion } from './promotion.entity';
 
 @Entity({ name: 'staff' })
 export class Staff {
@@ -33,4 +35,7 @@ export class Staff {
   @OneToOne(() => Account)
   @JoinColumn()
   account: Account;
+
+  @OneToMany(() => Promotion, (promotion) => promotion.staff_id_create)
+  promotions: Promotion[];
 }
