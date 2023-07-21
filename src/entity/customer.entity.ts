@@ -10,6 +10,7 @@ import {
 import { Account } from './account.entity';
 import { CustomerType } from './customer_type.entity';
 import { ReceiptInformation } from './receipt_information';
+import { Cart } from './cart.entity';
 
 @Entity({ name: 'staff' })
 export class Customer {
@@ -45,5 +46,8 @@ export class Customer {
     () => ReceiptInformation,
     (receiptInformation) => receiptInformation.customers,
   )
+  @OneToMany(() => Cart, (cart) => cart.customer)
+  carts: Cart[];
+
   receiptInformation: ReceiptInformation;
 }
