@@ -10,6 +10,7 @@ import { Publisher } from './entity/publisher.entity';
 import { Tag } from './entity/tag.entity';
 import { Rate } from './entity/rate.entity';
 import { BookTypeModule } from './modules/book_type/book_type.module';
+import { PublisherModule } from './modules/publisher/publisher.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -23,9 +24,10 @@ import { BookTypeModule } from './modules/book_type/book_type.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       entities: [Book, BookType, Publisher, Tag, Rate],
-      synchronize: true,
+      synchronize: false,
     }),
     BookTypeModule,
+    PublisherModule,
   ],
   controllers: [AppController],
   providers: [AppService],
