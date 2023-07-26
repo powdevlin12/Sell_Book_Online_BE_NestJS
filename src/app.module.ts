@@ -4,6 +4,12 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { Book } from './entity/book.entity';
+import { BookType } from './entity/type_book.entity';
+import { Publisher } from './entity/publisher.entity';
+import { Tag } from './entity/tag.entity';
+import { Rate } from './entity/rate.entity';
+import { BookTypeModule } from './modules/book_type/book_type.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -16,9 +22,10 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [],
+      entities: [Book, BookType, Publisher, Tag, Rate],
       synchronize: true,
     }),
+    BookTypeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

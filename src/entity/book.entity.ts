@@ -12,6 +12,7 @@ import { Rate } from './rate.entity';
 import { Publisher } from './publisher.entity';
 import { Author } from './author.entity';
 import { PromotionBook } from './promotion_book.entiti';
+import { BookType } from './type_book.entity';
 
 @Entity({ name: 'book' })
 export class Book {
@@ -42,23 +43,30 @@ export class Book {
   @OneToMany(() => Rate, (rate) => rate.book)
   rates: Rate[];
 
-  @ManyToOne(() => Publisher, (publisher) => publisher.books)
+  @ManyToOne(() => Publisher, (publisher) => publisher.books, {
+    cascade: ['update'],
+  })
   publishers: Publisher;
 
-  @ManyToMany(() => Author)
-  @JoinTable({
-    name: 'compositions',
-    joinColumn: {
-      name: 'author',
-      referencedColumnName: 'author_id',
-    },
-    inverseJoinColumn: {
-      name: 'book',
-      referencedColumnName: 'book_id',
-    },
-  })
-  authors: Author[];
+  // @ManyToMany(() => Author)
+  // @JoinTable({
+  //   name: 'compositions',
+  //   joinColumn: {
+  //     name: 'author',
+  //     referencedColumnName: 'author_id',
+  //   },
+  //   inverseJoinColumn: {
+  //     name: 'book',
+  //     referencedColumnName: 'book_id',
+  //   },
+  // })
+  // authors: Author[];
 
-  @OneToMany(() => PromotionBook, (promotion_book) => promotion_book.book)
-  promotion_books: PromotionBook[];
+  // @OneToMany(() => PromotionBook, (promotion_book) => promotion_book.book)
+  // promotion_books: PromotionBook[];
+
+  @ManyToOne(() => BookType, (bookType) => bookType.books, {
+    cascade: ['update'],
+  })
+  bookType: BookType;
 }

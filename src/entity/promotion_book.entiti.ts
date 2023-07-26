@@ -10,6 +10,6 @@ export class PromotionBook {
   @ManyToOne(() => Promotion, (promotion) => promotion.promotion_books)
   promotion: Promotion;
 
-  @ManyToOne(() => Book, (book) => book.promotion_books)
-  book: Book;
+  // @ManyToOne(() => Book, (book) => book.promotion_books)
+  // book: Book;
 }
