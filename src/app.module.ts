@@ -11,6 +11,7 @@ import { Tag } from './entity/tag.entity';
 import { Rate } from './entity/rate.entity';
 import { BookTypeModule } from './modules/book_type/book_type.module';
 import { PublisherModule } from './modules/publisher/publisher.module';
+import { BookModule } from './modules/book/book.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,6 +29,7 @@ import { PublisherModule } from './modules/publisher/publisher.module';
     }),
     BookTypeModule,
     PublisherModule,
+    BookModule,
   ],
   controllers: [AppController],
   providers: [AppService],

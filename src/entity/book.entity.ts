@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -28,7 +29,7 @@ export class Book {
   @Column({ type: 'int' })
   price: number;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', nullable: true })
   release_year: Date;
 
   @Column({ type: 'int' })
@@ -46,6 +47,7 @@ export class Book {
   @ManyToOne(() => Publisher, (publisher) => publisher.books, {
     cascade: ['update'],
   })
+  @JoinColumn({ name: 'publisher_id' })
   publishers: Publisher;
 
   // @ManyToMany(() => Author)
@@ -68,5 +70,6 @@ export class Book {
   @ManyToOne(() => BookType, (bookType) => bookType.books, {
     cascade: ['update'],
   })
+  @JoinColumn({ name: 'book_type_id' })
   bookType: BookType;
 }

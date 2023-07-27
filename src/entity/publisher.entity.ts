@@ -12,10 +12,10 @@ export class Publisher {
   @Column({ type: 'nvarchar', length: 300 })
   address: string;
 
-  @Column({ type: 'varchar', length: 10 })
+  @Column({ type: 'varchar', length: 10, unique: true })
   phone_number: string;
 
-  @Column({ type: 'nvarchar', length: 100 })
+  @Column({ type: 'nvarchar', length: 100, unique: true })
   email: string;
 
   @OneToMany(() => Book, (book) => book.publishers)
