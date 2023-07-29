@@ -12,6 +12,13 @@ export class BookTypeService {
     private bookTypeRepository: Repository<BookType>,
   ) {}
 
+  async getBookType(id: string) {
+    const bookType = await this.bookTypeRepository.findOne({
+      where: { book_type_id: id },
+    });
+    return bookType;
+  }
+
   async createBookType(body: CreateBookTypeDTO) {
     const bookType = await this.bookTypeRepository.findOne({
       where: { book_type_name: body.book_type_name },

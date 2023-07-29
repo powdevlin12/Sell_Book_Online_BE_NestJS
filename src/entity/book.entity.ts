@@ -50,19 +50,19 @@ export class Book {
   @JoinColumn({ name: 'publisher_id' })
   publishers: Publisher;
 
-  // @ManyToMany(() => Author)
-  // @JoinTable({
-  //   name: 'compositions',
-  //   joinColumn: {
-  //     name: 'author',
-  //     referencedColumnName: 'author_id',
-  //   },
-  //   inverseJoinColumn: {
-  //     name: 'book',
-  //     referencedColumnName: 'book_id',
-  //   },
-  // })
-  // authors: Author[];
+  @ManyToMany(() => Author, { cascade: true })
+  @JoinTable({
+    name: 'compositions',
+    inverseJoinColumn: {
+      name: 'author_id',
+      referencedColumnName: 'author_id',
+    },
+    joinColumn: {
+      name: 'book_id',
+      referencedColumnName: 'book_id',
+    },
+  })
+  authors: Author[];
 
   // @OneToMany(() => PromotionBook, (promotion_book) => promotion_book.book)
   // promotion_books: PromotionBook[];

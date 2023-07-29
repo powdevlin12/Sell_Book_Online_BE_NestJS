@@ -12,6 +12,12 @@ import { Rate } from './entity/rate.entity';
 import { BookTypeModule } from './modules/book_type/book_type.module';
 import { PublisherModule } from './modules/publisher/publisher.module';
 import { BookModule } from './modules/book/book.module';
+import { Author } from './entity/author.entity';
+import { AuthorModule } from './modules/author/author.module';
+import { TagModule } from './modules/tag/tag.module';
+import { RateController } from './modules/rate/rate.controller';
+import { RateModule } from './modules/rate/rate.module';
+import { RateService } from './modules/rate/rate.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,12 +30,15 @@ import { BookModule } from './modules/book/book.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [Book, BookType, Publisher, Tag, Rate],
+      entities: [Book, BookType, Publisher, Tag, Rate, Author],
       synchronize: false,
     }),
     BookTypeModule,
     PublisherModule,
     BookModule,
+    AuthorModule,
+    TagModule,
+    RateModule,
   ],
   controllers: [AppController],
   providers: [AppService],

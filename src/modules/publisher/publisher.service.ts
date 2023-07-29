@@ -12,6 +12,14 @@ export class PublisherService {
     private publisherRepository: Repository<Publisher>,
   ) {}
 
+  async getPublisher(id: string) {
+    const publisher = await this.publisherRepository.findOne({
+      where: { publisher_id: id },
+    });
+
+    return publisher;
+  }
+
   async createPublisher(body: CreatePublisherDTO) {
     const publisherName = await this.publisherRepository.findOne({
       where: { name: body.name },
