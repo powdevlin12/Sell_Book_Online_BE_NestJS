@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import {
+  IsArray,
   IsDate,
   IsNumber,
   IsOptional,
@@ -37,4 +38,7 @@ export class CreateBookDTO {
 
   @IsString()
   book_type_id: string;
+
+  @IsArray()
+  list_authors_id: string[];
 }

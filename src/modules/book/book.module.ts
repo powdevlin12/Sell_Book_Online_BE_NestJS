@@ -5,9 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BookService } from './book.service';
 import { BookTypeModule } from '../book_type/book_type.module';
 import { PublisherModule } from '../publisher/publisher.module';
+import { AuthorModule } from '../author/author.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Book]), BookTypeModule, PublisherModule],
+  imports: [
+    TypeOrmModule.forFeature([Book]),
+    BookTypeModule,
+    PublisherModule,
+    AuthorModule,
+  ],
   controllers: [BookController],
   providers: [BookService],
 })

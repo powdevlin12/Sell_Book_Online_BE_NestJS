@@ -50,7 +50,7 @@ export class Book {
   @JoinColumn({ name: 'publisher_id' })
   publishers: Publisher;
 
-  @ManyToMany((type) => Author, { cascade: true })
+  @ManyToMany(() => Author, { cascade: true })
   @JoinTable({
     name: 'compositions',
     inverseJoinColumn: {

@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Author } from 'src/entity/author.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { createAuthorDTO } from './dto/create-author.dto';
 import { ErrorException } from 'src/utils/Error';
 
@@ -14,6 +14,13 @@ export class AuthorService {
 
   async findAllAuthor(): Promise<Author[]> {
     const listAuthors = await this.authorRepository.find();
+    return listAuthors;
+  }
+
+  async findAuthorsWithListID(listId: string[]): Promise<Author[]> {
+    const listAuthors = await this.authorRepository.find({
+      where: { author_id: In(listId) },
+    });
     return listAuthors;
   }
 
