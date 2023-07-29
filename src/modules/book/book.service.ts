@@ -5,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BookTypeService } from '../book_type/book_type.service';
 import { PublisherService } from '../publisher/publisher.service';
-import { BookType } from 'src/entity/type_book.entity';
 import { AuthorService } from '../author/author.service';
 
 @Injectable()
@@ -28,7 +27,7 @@ export class BookService {
   async findBookById(id: string): Promise<Book> {
     const book = await this.bookRepository.findOne({
       where: { book_id: id },
-      relations: ['bookType', 'publishers'],
+      relations: ['bookType', 'publishers', 'authors'],
     });
     return book;
   }
