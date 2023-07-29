@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Book } from './book.entity';
 
 @Entity('rate')
@@ -13,5 +19,6 @@ export class Rate {
   star: number;
 
   @ManyToOne(() => Book, (book) => book.rates)
+  @JoinColumn({ name: 'book_id' })
   book: Book;
 }

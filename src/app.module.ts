@@ -40,8 +40,8 @@ import { RateService } from './modules/rate/rate.service';
     TagModule,
     RateModule,
   ],
-  controllers: [AppController, RateController],
-  providers: [AppService, RateService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
