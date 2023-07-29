@@ -11,11 +11,11 @@ export class Author {
   @Column({ type: 'nvarchar', length: 30 })
   last_name: string;
 
-  @Column({ type: 'bool', length: 30 })
+  @Column({ type: 'bool' })
   gender: boolean;
 
-  @Column({ type: 'date' })
-  date_of_birth: string;
+  @Column({ type: 'date', nullable: true })
+  date_of_birth: Date;
 
   @Column({ type: 'char', length: 10 })
   phone_number: string;
