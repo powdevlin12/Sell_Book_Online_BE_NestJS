@@ -51,10 +51,13 @@ export class Customer {
 
   @OneToMany(
     () => ReceiptInformation,
-    (receiptInformation) => receiptInformation.customers,
+    (receiptInformation) => receiptInformation.customer,
+    {
+      cascade: ['remove'],
+    },
   )
+  receiptInformations: ReceiptInformation[];
+
   @OneToMany(() => Cart, (cart) => cart.customer)
   carts: Cart[];
-
-  receiptInformation: ReceiptInformation;
 }

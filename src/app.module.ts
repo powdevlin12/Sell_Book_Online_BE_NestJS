@@ -26,6 +26,8 @@ import { CustomerModule } from './modules/customer/customer.module';
 import { CartModule } from './modules/cart/cart.module';
 import { CartDetail } from './entity/cart_detail.entity';
 import { CartDetailModule } from './modules/cart-detail/cart-detail.module';
+import { ReceiptInfomationModule } from './modules/receipt-infomation/receipt-infomation.module';
+import { ReceiptInformation } from './entity/receipt_information';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -49,6 +51,7 @@ import { CartDetailModule } from './modules/cart-detail/cart-detail.module';
         CustomerType,
         Cart,
         CartDetail,
+        ReceiptInformation,
       ],
       synchronize: false,
     }),
@@ -62,6 +65,7 @@ import { CartDetailModule } from './modules/cart-detail/cart-detail.module';
     CustomerModule,
     CartModule,
     CartDetailModule,
+    ReceiptInfomationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

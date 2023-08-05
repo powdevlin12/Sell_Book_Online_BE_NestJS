@@ -46,12 +46,12 @@ export class Book {
   rates: Rate[];
 
   @ManyToOne(() => Publisher, (publisher) => publisher.books, {
-    cascade: ['update'],
+    cascade: ['remove'],
   })
   @JoinColumn({ name: 'publisher_id' })
   publishers: Publisher;
 
-  @ManyToMany(() => Author, { cascade: true })
+  @ManyToMany(() => Author, { cascade: ['remove'] })
   @JoinTable({
     name: 'compositions',
     inverseJoinColumn: {
