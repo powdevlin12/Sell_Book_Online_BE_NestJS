@@ -120,5 +120,31 @@ export class AuthService {
       .where('customer_id = :id', { id: userId })
       .execute();
   }
-  refreshTokens() {}
+  async refreshTokens(userId: string, rt: string) {
+    const user = await this.customerRepository
+      .createQueryBuilder()
+      .where('customer_id = :id', { id: userId })
+      .getOne();
+
+    if (!user)
+      throw new ErrorException(
+        'Không tìm thấy người dùng',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    const isRtValid = await bcrypt.compare(rt, user.hashedRt);
+    if (!isRtValid)
+      throw new ErrorException(
+        'Refresh token không hợp lệ',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    const tokens = await this.getTokens(
+      user.customer_id,
+      user.role,
+      user.email,
+    );
+    await this.updateRtHash(user.customer_id, tokens.refresh_token);
+    return tokens;
+  }
 }

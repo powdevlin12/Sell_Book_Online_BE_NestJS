@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CreateBookTypeDTO } from './dto/create-book-type.dto';
 import { BookTypeService } from './book_type.service';
 
@@ -8,5 +8,10 @@ export class BookTypeController {
   @Post()
   createBookType(@Body() body: CreateBookTypeDTO) {
     return this.bookTypeService.createBookType(body);
+  }
+
+  @Get()
+  getAll() {
+    return this.bookTypeService.getAllBookTypes();
   }
 }

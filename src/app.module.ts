@@ -22,6 +22,10 @@ import { AuthModule } from './modules/auth/auth.module';
 import { Customer } from './entity/customer.entity';
 import { CustomerType } from './entity/customer_type.entity';
 import { Cart } from './entity/cart.entity';
+import { CustomerModule } from './modules/customer/customer.module';
+import { CartModule } from './modules/cart/cart.module';
+import { CartDetail } from './entity/cart_detail.entity';
+import { CartDetailModule } from './modules/cart-detail/cart-detail.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -44,6 +48,7 @@ import { Cart } from './entity/cart.entity';
         Customer,
         CustomerType,
         Cart,
+        CartDetail,
       ],
       synchronize: false,
     }),
@@ -54,6 +59,9 @@ import { Cart } from './entity/cart.entity';
     TagModule,
     RateModule,
     AuthModule,
+    CustomerModule,
+    CartModule,
+    CartDetailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

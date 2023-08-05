@@ -27,6 +27,10 @@ export class AuthController {
   @Post('local/signin')
   @HttpCode(HttpStatus.OK)
   signinLocal(@Body() dto: loginDTO): Promise<Tokens> {
+    console.log(
+      '🚀 ~ file: auth.controller.ts:30 ~ AuthController ~ signinLocal ~ loginDTO:',
+      loginDTO,
+    );
     return this.authService.signinLocal(dto);
   }
 
@@ -39,10 +43,11 @@ export class AuthController {
     return this.authService.logout(user['userId']);
   }
 
-  @UseGuards(AuthGuard('jwt-refresh'))
+  @UseGuards(AuthGuard('jwt-rt'))
   @Post('/refresh')
   @HttpCode(HttpStatus.OK)
-  refreshTokens() {
-    this.authService.refreshTokens();
+  refreshTokens(@Req() req: Request) {
+    const user = req.user;
+    this.authService.refreshTokens(user['userId'], user['refreshToken']);
   }
 }
