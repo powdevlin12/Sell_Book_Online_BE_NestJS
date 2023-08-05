@@ -100,4 +100,18 @@ export class CartService {
       throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
+  async getAllCartForCustomer(idCustomer: string) {
+    const cart = await this.cartRepository.find({
+      where: {
+        customer: {
+          customer_id: idCustomer,
+        },
+        isCompleted: false,
+      },
+      relations: ['cartDetail'],
+    });
+
+    return cart;
+  }
 }

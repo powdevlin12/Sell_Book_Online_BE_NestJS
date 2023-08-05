@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -29,5 +30,13 @@ export class CartController {
       quantity,
     };
     return this.cartService.createCart(params);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  getCartForCustomer(@Req() req: Request) {
+    const user = req.user;
+    return this.cartService.getAllCartForCustomer(user['userId']);
   }
 }
