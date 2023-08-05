@@ -19,7 +19,7 @@ export class BookService {
 
   async findAllBooks(): Promise<Book[]> {
     const bookList = await this.bookRepository.find({
-      relations: ['bookType', 'publishers'],
+      relations: ['bookType', 'publishers', 'authors'],
     });
     return bookList;
   }

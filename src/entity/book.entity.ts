@@ -14,6 +14,7 @@ import { Publisher } from './publisher.entity';
 import { Author } from './author.entity';
 import { PromotionBook } from './promotion_book.entiti';
 import { BookType } from './type_book.entity';
+import { CartDetail } from './cart_detail.entity';
 
 @Entity({ name: 'book' })
 export class Book {
@@ -45,12 +46,12 @@ export class Book {
   rates: Rate[];
 
   @ManyToOne(() => Publisher, (publisher) => publisher.books, {
-    cascade: ['update'],
+    cascade: ['remove'],
   })
   @JoinColumn({ name: 'publisher_id' })
   publishers: Publisher;
 
-  @ManyToMany(() => Author, { cascade: true })
+  @ManyToMany(() => Author, { cascade: ['remove'] })
   @JoinTable({
     name: 'compositions',
     inverseJoinColumn: {
@@ -72,4 +73,7 @@ export class Book {
   })
   @JoinColumn({ name: 'book_type_id' })
   bookType: BookType;
+
+  @OneToMany(() => CartDetail, (cartDetail) => cartDetail.book)
+  cartDetail: CartDetail[];
 }

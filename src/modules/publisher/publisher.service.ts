@@ -20,6 +20,11 @@ export class PublisherService {
     return publisher;
   }
 
+  async getAllPublishers(): Promise<Publisher[]> {
+    const publishers = await this.publisherRepository.find();
+    return publishers;
+  }
+
   async createPublisher(body: CreatePublisherDTO) {
     const publisherName = await this.publisherRepository.findOne({
       where: { name: body.name },

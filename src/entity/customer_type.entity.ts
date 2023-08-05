@@ -15,6 +15,6 @@ export class CustomerType {
   @Column({ type: 'nvarchar', length: 200 })
   name: string;
 
-  @ManyToOne(() => Customer, (customer) => customer.customerType)
-  customers: Customer[];
+  // @OneToMany(() => Customer, (customer) => customer.customerType)
+  // customers: Customer[];
 }

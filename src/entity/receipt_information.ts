@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Customer } from './customer.entity';
 
 @Entity({ name: 'receipt_information' })
@@ -24,9 +31,10 @@ export class ReceiptInformation {
   @Column({ type: 'nvarchar', length: 50 })
   name_receipt: string;
 
-  @Column({ type: 'bool' })
+  @Column({ type: 'tinyint', width: 2 })
   is_default: boolean;
 
-  @ManyToOne(() => Customer, (customer) => customer.receiptInformation)
-  customers: Customer[];
+  @ManyToOne(() => Customer, (customer) => customer.receiptInformations)
+  @JoinColumn({ name: 'customer_id' })
+  customer: Customer;
 }

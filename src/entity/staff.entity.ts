@@ -6,7 +6,6 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Account } from './account.entity';
 import { Promotion } from './promotion.entity';
 
 @Entity({ name: 'staff' })
@@ -32,9 +31,11 @@ export class Staff {
   @Column({ type: 'char', length: 10 })
   phone_number: string;
 
-  @OneToOne(() => Account)
-  @JoinColumn()
-  account: Account;
+  @Column({ type: 'varchar', length: 20 })
+  password: string;
+
+  @Column({ type: 'varchar', length: 20 })
+  role: string;
 
   @OneToMany(() => Promotion, (promotion) => promotion.staff_id_create)
   promotions: Promotion[];

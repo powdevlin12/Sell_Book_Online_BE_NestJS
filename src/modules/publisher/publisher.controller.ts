@@ -10,6 +10,12 @@ export class PublisherController {
   getPublisherById(@Param('id') id: string): Promise<Publisher> {
     return this.publisherService.getPublisher(id);
   }
+
+  @Get()
+  getAllPublisher(): Promise<Publisher[]> {
+    return this.publisherService.getAllPublishers();
+  }
+
   @Post()
   createPubliser(@Body() body: CreatePublisherDTO) {
     return this.publisherService.createPublisher(body);

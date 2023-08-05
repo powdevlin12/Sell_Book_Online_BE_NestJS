@@ -7,15 +7,17 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Account } from './account.entity';
 import { CustomerType } from './customer_type.entity';
 import { ReceiptInformation } from './receipt_information';
 import { Cart } from './cart.entity';
 
-@Entity({ name: 'staff' })
+@Entity({ name: 'customer' })
 export class Customer {
   @PrimaryGeneratedColumn('uuid')
   customer_id: string;
+
+  @Column({ type: 'nvarchar', length: 100, nullable: true })
+  avatar: string;
 
   @Column({ type: 'nvarchar', length: 30 })
   first_name: string;
@@ -23,10 +25,10 @@ export class Customer {
   @Column({ type: 'nvarchar', length: 30 })
   last_name: string;
 
-  @Column({ type: 'bool' })
+  @Column({ type: 'tinyint', width: 2 })
   gender: boolean;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', nullable: true })
   date_of_birth: Date;
 
   @Column({ type: 'char', length: 10 })
@@ -35,19 +37,27 @@ export class Customer {
   @Column({ type: 'varchar', length: 100 })
   email: string;
 
-  @OneToOne(() => Account)
-  @JoinColumn()
-  account: Account;
+  @Column({ type: 'varchar', length: 100 })
+  password: string;
 
-  @OneToMany(() => CustomerType, (customerType) => customerType.customers)
-  customerType: CustomerType;
+  @Column({ type: 'varchar', length: 20 })
+  role: string;
+
+  @Column({ type: 'varchar', length: 200, nullable: true })
+  hashedRt: string;
+
+  // @ManyToOne(() => CustomerType, (customerType) => customerType.customers, {})
+  // customerType: CustomerType;
 
   @OneToMany(
     () => ReceiptInformation,
-    (receiptInformation) => receiptInformation.customers,
+    (receiptInformation) => receiptInformation.customer,
+    {
+      cascade: ['remove'],
+    },
   )
+  receiptInformations: ReceiptInformation[];
+
   @OneToMany(() => Cart, (cart) => cart.customer)
   carts: Cart[];
-
-  receiptInformation: ReceiptInformation;
 }
