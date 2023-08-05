@@ -102,14 +102,14 @@ export class CartService {
   }
 
   async getAllCartForCustomer(idCustomer: string) {
-    const cart = await this.cartRepository.find({
+    const cart = await this.cartRepository.findOne({
       where: {
         customer: {
           customer_id: idCustomer,
         },
         isCompleted: false,
       },
-      relations: ['cartDetail'],
+      relations: ['cartDetail', 'cartDetail.book'],
     });
 
     return cart;

@@ -4,4 +4,15 @@ type CreateCartParams = {
   customer_id: string;
 };
 
-export { CreateCartParams };
+type CreateReceiptInfo = {
+  province: string;
+  district: string;
+  commune: string;
+  description_address: string;
+  phone: string;
+  name_receipt: string;
+  is_default: boolean;
+  customer_id: string;
+};
+
+export { CreateCartParams, CreateReceiptInfo };

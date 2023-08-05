@@ -22,11 +22,11 @@ export class CartDetail {
   @Column({ type: 'int' })
   quantity: number;
 
-  @ManyToOne(() => Cart, (cart) => cart.cartDetail, { cascade: ['update'] })
+  @ManyToOne(() => Cart, (cart) => cart.cartDetail, { cascade: ['remove'] })
   @JoinColumn({ name: 'cart_id' })
   cart: Cart;
 
-  @ManyToOne(() => Book, (book) => book.cartDetail, { cascade: ['update'] })
+  @ManyToOne(() => Book, (book) => book.cartDetail, { cascade: ['remove'] })
   @JoinColumn({ name: 'book_id' })
   book: Book;
 }
