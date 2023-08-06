@@ -13,6 +13,7 @@ import { Tokens } from './types';
 import { loginDTO } from './dto/login.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
+import { createStaffDTO } from './dto/create-staff.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -22,6 +23,12 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   signupLocal(@Body() dto: createCustomerDTO): Promise<Tokens> {
     return this.authService.signupLocal(dto);
+  }
+
+  @Post('local/signup-staff')
+  @HttpCode(HttpStatus.CREATED)
+  signupStaffLocal(@Body() dto: createStaffDTO): Promise<Tokens> {
+    return this.authService.signupLocalStaff(dto);
   }
 
   @Post('local/signin')

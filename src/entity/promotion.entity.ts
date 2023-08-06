@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -26,7 +27,8 @@ export class Promotion {
   @Column({ type: 'nvarchar', length: 300 })
   reason: string;
 
-  @ManyToOne(() => Staff, (staff) => staff.promotions)
+  @ManyToOne(() => Staff, (staff) => staff.promotions, { cascade: ['remove'] })
+  @JoinColumn({ name: 'staff_id' })
   staff_id_create: Staff;
 
   @OneToMany(() => PromotionBook, (promotion_book) => promotion_book.promotion)

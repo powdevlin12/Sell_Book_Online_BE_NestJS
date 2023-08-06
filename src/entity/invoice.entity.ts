@@ -20,9 +20,8 @@ export class Invoice {
   @Column({ type: 'date', nullable: true })
   invoice_date: Date;
 
-  @ManyToOne(() => Staff, (staff) => staff.invoices)
-  @JoinColumn({ name: 'staff_id' })
-  staff: Staff;
+  @Column({ type: 'int' })
+  total_cost: number;
 
   @OneToOne(() => Cart)
   @JoinColumn({ name: 'cart_id' })
@@ -34,6 +33,8 @@ export class Invoice {
   @ManyToOne(
     () => ReceiptInformation,
     (receiptInformation) => receiptInformation.invoices,
+    { cascade: ['remove'] },
   )
+  @JoinColumn({ name: 'receipt_information_id' })
   receiptInformation: ReceiptInformation;
 }

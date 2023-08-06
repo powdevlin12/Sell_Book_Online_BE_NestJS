@@ -71,6 +71,7 @@ export class Book {
   @ManyToOne(() => BookType, (bookType) => bookType.books, {
     cascade: ['remove'],
   })
+  @JoinColumn({ name: 'book_type_id' })
   bookType: BookType;
 
   @OneToMany(() => CartDetail, (cartDetail) => cartDetail.book)

@@ -6,11 +6,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { Customer } from 'src/entity/customer.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomerTypeModule } from '../customer-type/customer-type.module';
+import { Staff } from 'src/entity/staff.entity';
 
 @Module({
   imports: [
     JwtModule.register({}),
-    TypeOrmModule.forFeature([Customer]),
+    TypeOrmModule.forFeature([Customer, Staff]),
     CustomerTypeModule,
   ],
   controllers: [AuthController],
