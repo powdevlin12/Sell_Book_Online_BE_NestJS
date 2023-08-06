@@ -36,6 +36,7 @@ import { PromotionCustomer } from './entity/promotion_customer.entity';
 import { Staff } from './entity/staff.entity';
 import { Status } from './entity/status.entity';
 import { StatusInvoice } from './entity/status_invoice.entity';
+import { CustomerTypeModule } from './modules/customer-type/customer-type.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -68,7 +69,7 @@ import { StatusInvoice } from './entity/status_invoice.entity';
         Status,
         StatusInvoice,
       ],
-      synchronize: true,
+      synchronize: false,
     }),
     BookTypeModule,
     PublisherModule,
@@ -82,6 +83,7 @@ import { StatusInvoice } from './entity/status_invoice.entity';
     CartDetailModule,
     ReceiptInfomationModule,
     StaffModule,
+    CustomerTypeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

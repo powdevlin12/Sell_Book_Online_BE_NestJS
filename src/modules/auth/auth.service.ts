@@ -8,12 +8,14 @@ import { Customer } from 'src/entity/customer.entity';
 import { Repository } from 'typeorm';
 import { loginDTO } from './dto/login.dto';
 import { ErrorException } from 'src/utils/Error';
+import { CustomerTypeService } from '../customer-type/customer-type.service';
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
     @InjectRepository(Customer)
     private customerRepository: Repository<Customer>,
+    private readonly customerTypeService: CustomerTypeService,
   ) {}
   hashData(data: string) {
     return bcrypt.hash(data, 10);
@@ -57,7 +59,14 @@ export class AuthService {
 
   async signupLocal(dto: createCustomerDTO): Promise<Tokens> {
     const hash = await this.hashData(dto.password);
-    const newUser = this.customerRepository.create({ ...dto, password: hash });
+    const customerType = await this.customerTypeService.getCustomerType(
+      dto.customer_type_id,
+    );
+    const newUser = this.customerRepository.create({
+      ...dto,
+      password: hash,
+      customerType,
+    });
     console.log(
       '🚀 ~ file: auth.service.ts:59 ~ AuthService ~ signupLocal ~ newUser:',
       newUser,

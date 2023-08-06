@@ -11,10 +11,13 @@ export class CustomerService {
   ) {}
 
   async getMySelf(id: string) {
-    const user = await this.customerRepository
-      .createQueryBuilder()
-      .where('customer_id = :id', { id })
-      .getOne();
+    const user = await this.customerRepository.findOne({
+      where: { customer_id: id },
+      relations: ['customerType'],
+    });
+    // .createQueryBuilder()
+    // .where('customer_id = :id', { id })
+    // .getOne();
     console.log(
       '🚀 ~ file: customer.service.ts:18 ~ CustomerService ~ getMySelf ~ user:',
       user,
