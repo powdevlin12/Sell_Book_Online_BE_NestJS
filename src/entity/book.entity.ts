@@ -65,13 +65,12 @@ export class Book {
   })
   authors: Author[];
 
-  // @OneToMany(() => PromotionBook, (promotion_book) => promotion_book.book)
-  // promotion_books: PromotionBook[];
+  @OneToMany(() => PromotionBook, (promotion_book) => promotion_book.book)
+  promotion_books: PromotionBook[];
 
   @ManyToOne(() => BookType, (bookType) => bookType.books, {
-    cascade: ['update'],
+    cascade: ['remove'],
   })
-  @JoinColumn({ name: 'book_type_id' })
   bookType: BookType;
 
   @OneToMany(() => CartDetail, (cartDetail) => cartDetail.book)

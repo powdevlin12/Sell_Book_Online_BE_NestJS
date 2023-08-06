@@ -34,4 +34,8 @@ export class createCustomerDTO {
 
   @IsOptional()
   avatar: string;
+
+  @IsString()
+  @MaxLength(36)
+  customer_type_id: string;
 }

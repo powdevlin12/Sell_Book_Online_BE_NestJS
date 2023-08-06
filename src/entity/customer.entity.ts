@@ -46,8 +46,11 @@ export class Customer {
   @Column({ type: 'varchar', length: 200, nullable: true })
   hashedRt: string;
 
-  // @ManyToOne(() => CustomerType, (customerType) => customerType.customers, {})
-  // customerType: CustomerType;
+  @ManyToOne(() => CustomerType, (customerType) => customerType.customers, {
+    cascade: ['remove'],
+  })
+  @JoinColumn({ name: 'customer_type_id' })
+  customerType: CustomerType;
 
   @OneToMany(
     () => ReceiptInformation,

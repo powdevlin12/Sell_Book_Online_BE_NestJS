@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Customer } from './customer.entity';
+import { Invoice } from './invoice.entity';
 
 @Entity({ name: 'receipt_information' })
 export class ReceiptInformation {
@@ -37,4 +38,7 @@ export class ReceiptInformation {
   @ManyToOne(() => Customer, (customer) => customer.receiptInformations)
   @JoinColumn({ name: 'customer_id' })
   customer: Customer;
+
+  @OneToMany(() => Invoice, (invoice) => invoice.receiptInformation)
+  invoices: Invoice[];
 }

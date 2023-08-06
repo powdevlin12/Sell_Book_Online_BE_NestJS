@@ -28,6 +28,16 @@ import { CartDetail } from './entity/cart_detail.entity';
 import { CartDetailModule } from './modules/cart-detail/cart-detail.module';
 import { ReceiptInfomationModule } from './modules/receipt-infomation/receipt-infomation.module';
 import { ReceiptInformation } from './entity/receipt_information';
+import { StaffModule } from './modules/staff/staff.module';
+import { Invoice } from './entity/invoice.entity';
+import { Promotion } from './entity/promotion.entity';
+import { PromotionBook } from './entity/promotion_book.entiti';
+import { PromotionCustomer } from './entity/promotion_customer.entity';
+import { Staff } from './entity/staff.entity';
+import { Status } from './entity/status.entity';
+import { StatusInvoice } from './entity/status_invoice.entity';
+import { CustomerTypeModule } from './modules/customer-type/customer-type.module';
+import { StatusModule } from './modules/status/status.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -52,6 +62,13 @@ import { ReceiptInformation } from './entity/receipt_information';
         Cart,
         CartDetail,
         ReceiptInformation,
+        Invoice,
+        Promotion,
+        PromotionBook,
+        PromotionCustomer,
+        Staff,
+        Status,
+        StatusInvoice,
       ],
       synchronize: false,
     }),
@@ -66,6 +83,9 @@ import { ReceiptInformation } from './entity/receipt_information';
     CartModule,
     CartDetailModule,
     ReceiptInfomationModule,
+    StaffModule,
+    CustomerTypeModule,
+    StatusModule,
   ],
   controllers: [AppController],
   providers: [AppService],
