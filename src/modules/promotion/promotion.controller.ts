@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Req,
   UseGuards,
@@ -33,7 +34,12 @@ export class PromotionController {
   }
 
   @Get('/customer-type')
-  getCustomerType() {
+  getAllCustomerType() {
     return this.promotionService.getAllPromotionCustomer();
+  }
+
+  @Get('/customer-type/:id')
+  getCustomerType(@Param('id') id: string) {
+    return this.promotionService.getPromotionCustomer(id);
   }
 }

@@ -53,9 +53,25 @@ export class PromotionService {
         },
       },
     });
-
     return listPromotions;
   }
+
+  async getPromotionCustomer(idCustomerType: string) {
+    const listPromotions = await this.promotionCustomerRepository.find({
+      relations: ['customerType', 'promotion'],
+      where: {
+        promotion: {
+          end_date: MoreThan(new Date()),
+          start_date: LessThan(new Date()),
+        },
+        customerType: {
+          customer_type_id: idCustomerType,
+        },
+      },
+    });
+    return listPromotions;
+  }
+
   async createPromotionCustomer(body: CreatePromotionCustomerDTO) {
     const { customer_type_id, percent_discount, promotion_id } = body;
     try {

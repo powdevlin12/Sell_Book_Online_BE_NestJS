@@ -22,6 +22,39 @@ export class CartService {
     private cartDetailRepository: Repository<CartDetail>,
   ) {}
 
+  async getCartNotCompleted(customer_id: string) {
+    const cart = await this.cartRepository.findOne({
+      relations: {
+        customer: true,
+        cartDetail: true,
+      },
+      where: {
+        customer: {
+          customer_id: customer_id,
+        },
+        isCompleted: false,
+      },
+    });
+    return cart;
+  }
+
+  async getCartByIdNotCompleted(id: string, idCustomer: string) {
+    const cart = await this.cartRepository.findOne({
+      relations: {
+        customer: true,
+        cartDetail: true,
+      },
+      where: {
+        cart_id: id,
+        isCompleted: false,
+        customer: {
+          customer_id: idCustomer,
+        },
+      },
+    });
+    return cart;
+  }
+
   async createCart(body: CreateCartParams) {
     const { customer_id, book_id, quantity } = body;
     const quantityNum = Number.parseInt(quantity);
@@ -112,6 +145,12 @@ export class CartService {
       relations: ['cartDetail', 'cartDetail.book'],
     });
 
+    return cart;
+  }
+
+  async handleWhenOrder(idCustomer: string) {
+    // update isCompleted is true
+    const cart = await this.getCartNotCompleted(idCustomer);
     return cart;
   }
 }
