@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -29,5 +30,10 @@ export class PromotionController {
   @HttpCode(HttpStatus.OK)
   createPromotionCustomer(@Body() body: CreatePromotionCustomerDTO) {
     return this.promotionService.createPromotionCustomer(body);
+  }
+
+  @Get('/customer-type')
+  getCustomerType() {
+    return this.promotionService.getAllPromotionCustomer();
   }
 }

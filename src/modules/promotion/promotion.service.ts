@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Promotion } from 'src/entity/promotion.entity';
-import { Repository } from 'typeorm';
+import { LessThan, MoreThan, Repository } from 'typeorm';
 import { CreatePromotionDTO } from './dto/create-promotion.dto';
 import { StaffService } from '../staff/staff.service';
 import { CreatePromotionCustomerDTO } from './dto/create-promotion-customer';
@@ -43,6 +43,19 @@ export class PromotionService {
     }
   }
 
+  async getAllPromotionCustomer() {
+    const listPromotions = await this.promotionCustomerRepository.find({
+      relations: ['customerType', 'promotion'],
+      where: {
+        promotion: {
+          end_date: MoreThan(new Date()),
+          start_date: LessThan(new Date()),
+        },
+      },
+    });
+
+    return listPromotions;
+  }
   async createPromotionCustomer(body: CreatePromotionCustomerDTO) {
     const { customer_type_id, percent_discount, promotion_id } = body;
     try {
