@@ -38,6 +38,7 @@ import { Status } from './entity/status.entity';
 import { StatusInvoice } from './entity/status_invoice.entity';
 import { CustomerTypeModule } from './modules/customer-type/customer-type.module';
 import { StatusModule } from './modules/status/status.module';
+import { PromotionModule } from './modules/promotion/promotion.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -86,6 +87,7 @@ import { StatusModule } from './modules/status/status.module';
     StaffModule,
     CustomerTypeModule,
     StatusModule,
+    PromotionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
