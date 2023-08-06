@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Promotion } from './promotion.entity';
+import { Invoice } from './invoice.entity';
 
 @Entity({ name: 'staff' })
 export class Staff {
@@ -19,7 +20,7 @@ export class Staff {
   @Column({ type: 'nvarchar', length: 30 })
   last_name: string;
 
-  @Column({ type: 'bool' })
+  @Column({ type: 'tinyint', width: 2 })
   gender: boolean;
 
   @Column({ type: 'nvarchar', length: 250 })
@@ -39,4 +40,7 @@ export class Staff {
 
   @OneToMany(() => Promotion, (promotion) => promotion.staff_id_create)
   promotions: Promotion[];
+
+  @OneToMany(() => Invoice, (invoice) => invoice.staff)
+  invoices: Invoice[];
 }

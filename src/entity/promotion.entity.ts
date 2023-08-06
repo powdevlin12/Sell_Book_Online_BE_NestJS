@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Staff } from './staff.entity';
 import { PromotionBook } from './promotion_book.entiti';
+import { PromotionCustomer } from './promotion_customer.entity';
 
 @Entity('promotion')
 export class Promotion {
@@ -30,4 +31,10 @@ export class Promotion {
 
   @OneToMany(() => PromotionBook, (promotion_book) => promotion_book.promotion)
   promotion_books: PromotionBook[];
+
+  @OneToMany(
+    () => PromotionCustomer,
+    (promotion_customer) => promotion_customer.promotion,
+  )
+  promotion_customers: PromotionCustomer[];
 }
