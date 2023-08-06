@@ -24,6 +24,9 @@ export class Book {
   @Column({ type: 'nvarchar', length: 200, unique: true })
   book_name: string;
 
+  @Column({ type: 'nvarchar', length: 300 })
+  description: string;
+
   @Column({ type: 'int' })
   pages: number;
 
