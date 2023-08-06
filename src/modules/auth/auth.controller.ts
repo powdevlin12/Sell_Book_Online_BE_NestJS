@@ -41,6 +41,16 @@ export class AuthController {
     return this.authService.signinLocal(dto);
   }
 
+  @Post('local/signin-staff')
+  @HttpCode(HttpStatus.OK)
+  signinStaffLocal(@Body() dto: loginDTO): Promise<Tokens> {
+    console.log(
+      '🚀 ~ file: auth.controller.ts:30 ~ AuthController ~ signinLocal ~ loginDTO:',
+      loginDTO,
+    );
+    return this.authService.signinStaffLocal(dto);
+  }
+
   @UseGuards(AuthGuard('jwt'))
   @Post('/logout')
   @HttpCode(HttpStatus.OK)

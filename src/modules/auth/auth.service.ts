@@ -142,6 +142,39 @@ export class AuthService {
     await this.updateRtHash(user.customer_id, tokens.refresh_token);
     return tokens;
   }
+  // signin staff
+  async signinStaffLocal(dto: loginDTO): Promise<Tokens> {
+    const { email, password } = dto;
+
+    const staff = await this.staffRepository
+      .createQueryBuilder()
+      .where('email = :email', { email })
+      .getOne();
+
+    if (!staff)
+      throw new ErrorException(
+        'Tài khoản hoặc mật khẩu không chính xác',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    const passwordMatches = await bcrypt.compare(password, staff.password);
+
+    if (!passwordMatches)
+      throw new ErrorException(
+        'Tài khoản hoặc mật khẩu không chính xác',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    const tokens = await this.getTokens(
+      staff.staff_id,
+      staff.role,
+      staff.email,
+    );
+
+    await this.updateRtHash(staff.staff_id, tokens.refresh_token);
+    return tokens;
+  }
+
   async logout(userId: string) {
     await this.customerRepository
       .createQueryBuilder()
