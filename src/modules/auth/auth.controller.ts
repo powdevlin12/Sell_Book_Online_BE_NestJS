@@ -13,6 +13,7 @@ import { Tokens } from './types';
 import { loginDTO } from './dto/login.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
+import { createStaffDTO } from './dto/create-staff.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -24,6 +25,12 @@ export class AuthController {
     return this.authService.signupLocal(dto);
   }
 
+  @Post('local/signup-staff')
+  @HttpCode(HttpStatus.CREATED)
+  signupStaffLocal(@Body() dto: createStaffDTO): Promise<Tokens> {
+    return this.authService.signupLocalStaff(dto);
+  }
+
   @Post('local/signin')
   @HttpCode(HttpStatus.OK)
   signinLocal(@Body() dto: loginDTO): Promise<Tokens> {
@@ -32,6 +39,16 @@ export class AuthController {
       loginDTO,
     );
     return this.authService.signinLocal(dto);
+  }
+
+  @Post('local/signin-staff')
+  @HttpCode(HttpStatus.OK)
+  signinStaffLocal(@Body() dto: loginDTO): Promise<Tokens> {
+    console.log(
+      '🚀 ~ file: auth.controller.ts:30 ~ AuthController ~ signinLocal ~ loginDTO:',
+      loginDTO,
+    );
+    return this.authService.signinStaffLocal(dto);
   }
 
   @UseGuards(AuthGuard('jwt'))

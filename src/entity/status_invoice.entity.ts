@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Status } from './status.entity';
 import { Invoice } from './invoice.entity';
+import { Staff } from './staff.entity';
 
 @Entity('status-invoice')
 export class StatusInvoice {
@@ -25,6 +26,12 @@ export class StatusInvoice {
   })
   @JoinColumn({ name: 'invoice_id' })
   invoice: Invoice;
+
+  @ManyToOne(() => Staff, (staff) => staff.statusInvoices, {
+    cascade: ['remove'],
+  })
+  @JoinColumn({ name: 'staff_id' })
+  staff: Staff;
 
   @Column({ type: 'date' })
   date_change: Date;

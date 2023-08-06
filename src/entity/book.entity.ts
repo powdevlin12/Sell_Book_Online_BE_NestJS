@@ -24,6 +24,9 @@ export class Book {
   @Column({ type: 'nvarchar', length: 200, unique: true })
   book_name: string;
 
+  @Column({ type: 'nvarchar', length: 300 })
+  description: string;
+
   @Column({ type: 'int' })
   pages: number;
 
@@ -71,6 +74,7 @@ export class Book {
   @ManyToOne(() => BookType, (bookType) => bookType.books, {
     cascade: ['remove'],
   })
+  @JoinColumn({ name: 'book_type_id' })
   bookType: BookType;
 
   @OneToMany(() => CartDetail, (cartDetail) => cartDetail.book)
