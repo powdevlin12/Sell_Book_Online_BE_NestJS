@@ -18,5 +18,6 @@ import { BookModule } from '../book/book.module';
   ],
   controllers: [CartController],
   providers: [CartService, AtStrategy, RtStrategy],
+  exports: [CartService],
 })
 export class CartModule {}

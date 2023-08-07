@@ -62,4 +62,18 @@ export class ReceiptInfomationService {
       throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
+  async getOneReceiptInfo(id: string) {
+    try {
+      const receiptInfo = await this.receiptInfoRepository.findOne({
+        where: {
+          receipt_information_id: id,
+        },
+      });
+      return receiptInfo;
+    } catch (error) {
+      console.log(error);
+      throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 }

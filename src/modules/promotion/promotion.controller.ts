@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Req,
   UseGuards,
@@ -29,5 +31,15 @@ export class PromotionController {
   @HttpCode(HttpStatus.OK)
   createPromotionCustomer(@Body() body: CreatePromotionCustomerDTO) {
     return this.promotionService.createPromotionCustomer(body);
+  }
+
+  @Get('/customer-type')
+  getAllCustomerType() {
+    return this.promotionService.getAllPromotionCustomer();
+  }
+
+  @Get('/customer/:id')
+  getCustomerType(@Param('id') id: string) {
+    return this.promotionService.getPromotionCustomer(id);
   }
 }

@@ -8,6 +8,7 @@ import { AtStrategy, RtStrategy } from '../auth/strategies';
 import { StaffModule } from '../staff/staff.module';
 import { PromotionCustomer } from 'src/entity/promotion_customer.entity';
 import { CustomerTypeModule } from '../customer-type/customer-type.module';
+import { CustomerModule } from '../customer/customer.module';
 
 @Module({
   imports: [
@@ -15,8 +16,10 @@ import { CustomerTypeModule } from '../customer-type/customer-type.module';
     TypeOrmModule.forFeature([Promotion, PromotionCustomer]),
     StaffModule,
     CustomerTypeModule,
+    CustomerModule,
   ],
   controllers: [PromotionController],
   providers: [PromotionService, AtStrategy, RtStrategy],
+  exports: [PromotionService],
 })
 export class PromotionModule {}

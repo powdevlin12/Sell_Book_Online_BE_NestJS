@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Promotion } from 'src/entity/promotion.entity';
-import { Repository } from 'typeorm';
+import { LessThan, MoreThan, Repository } from 'typeorm';
 import { CreatePromotionDTO } from './dto/create-promotion.dto';
 import { StaffService } from '../staff/staff.service';
 import { CreatePromotionCustomerDTO } from './dto/create-promotion-customer';
 import { CustomerTypeService } from '../customer-type/customer-type.service';
 import { PromotionCustomer } from 'src/entity/promotion_customer.entity';
+import { CustomerService } from '../customer/customer.service';
 
 @Injectable()
 export class PromotionService {
@@ -17,6 +18,7 @@ export class PromotionService {
     private promotionCustomerRepository: Repository<PromotionCustomer>,
     private readonly staffService: StaffService,
     private readonly customerTypeService: CustomerTypeService,
+    private readonly customerService: CustomerService,
   ) {}
 
   async getPromotion(id: string) {
@@ -41,6 +43,44 @@ export class PromotionService {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async getAllPromotionCustomer() {
+    const listPromotions = await this.promotionCustomerRepository.find({
+      relations: ['customerType', 'promotion'],
+      where: {
+        promotion: {
+          end_date: MoreThan(new Date()),
+          start_date: LessThan(new Date()),
+        },
+      },
+    });
+    return listPromotions;
+  }
+
+  async getPromotionCustomer(idCustomer: string) {
+    const customer = await this.customerService.getMySelf(idCustomer);
+
+    const listPromotions = await this.promotionCustomerRepository.find({
+      relations: ['customerType', 'promotion'],
+      where: {
+        promotion: {
+          end_date: MoreThan(new Date()),
+          start_date: LessThan(new Date()),
+        },
+        customerType: {
+          customer_type_id: customer.customerType.customer_type_id,
+        },
+      },
+    });
+
+    const totalPercentPromotion = listPromotions.reduce(
+      (accumulator, currentValue) =>
+        accumulator + currentValue.percent_discount,
+      0,
+    );
+
+    return totalPercentPromotion;
   }
 
   async createPromotionCustomer(body: CreatePromotionCustomerDTO) {

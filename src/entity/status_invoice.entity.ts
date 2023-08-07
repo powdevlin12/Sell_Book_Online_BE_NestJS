@@ -1,16 +1,16 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Status } from './status.entity';
 import { Invoice } from './invoice.entity';
 import { Staff } from './staff.entity';
 
-@Entity('status-invoice')
+@Entity('status_invoice')
 export class StatusInvoice {
   @PrimaryGeneratedColumn('uuid')
   status_invoice_id: string;
@@ -33,6 +33,6 @@ export class StatusInvoice {
   @JoinColumn({ name: 'staff_id' })
   staff: Staff;
 
-  @Column({ type: 'date' })
+  @CreateDateColumn()
   date_change: Date;
 }

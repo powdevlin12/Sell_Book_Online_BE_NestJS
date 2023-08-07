@@ -39,6 +39,7 @@ import { StatusInvoice } from './entity/status_invoice.entity';
 import { CustomerTypeModule } from './modules/customer-type/customer-type.module';
 import { StatusModule } from './modules/status/status.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
+import { InvoiceModule } from './modules/invoice/invoice.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -88,6 +89,7 @@ import { PromotionModule } from './modules/promotion/promotion.module';
     CustomerTypeModule,
     StatusModule,
     PromotionModule,
+    InvoiceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

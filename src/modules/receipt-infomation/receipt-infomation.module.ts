@@ -14,5 +14,6 @@ import { CustomerModule } from '../customer/customer.module';
   ],
   controllers: [ReceiptInfomationController],
   providers: [ReceiptInfomationService],
+  exports: [ReceiptInfomationService],
 })
 export class ReceiptInfomationModule {}

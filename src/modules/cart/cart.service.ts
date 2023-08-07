@@ -22,11 +22,43 @@ export class CartService {
     private cartDetailRepository: Repository<CartDetail>,
   ) {}
 
+  async getCartNotCompleted(customer_id: string) {
+    const cart = await this.cartRepository.findOne({
+      relations: {
+        customer: true,
+        cartDetail: true,
+      },
+      where: {
+        customer: {
+          customer_id: customer_id,
+        },
+        isCompleted: false,
+      },
+    });
+    return cart;
+  }
+
+  async getCartByIdNotCompleted(id: string, idCustomer: string) {
+    const cart = await this.cartRepository.findOne({
+      relations: {
+        customer: true,
+        cartDetail: true,
+      },
+      where: {
+        cart_id: id,
+        isCompleted: false,
+        customer: {
+          customer_id: idCustomer,
+        },
+      },
+    });
+    return cart;
+  }
+
   async createCart(body: CreateCartParams) {
     const { customer_id, book_id, quantity } = body;
     const quantityNum = Number.parseInt(quantity);
     try {
-      // check cart of user don't handle
       const cart = await this.cartRepository.findOne({
         relations: {
           customer: true,
@@ -68,11 +100,18 @@ export class CartService {
         console.log('🚀 ~ file: cart.service.ts:42 ~ check cart exists');
 
         const checkExistBook = await this.cartDetailRepository.findOne({
-          where: { book: { book_id } },
+          where: { book: { book_id }, cart: { cart_id: cart.cart_id } },
           relations: ['book'],
         });
+        console.log(
+          '🚀 ~ file: cart.service.ts:107 ~ CartService ~ createCart ~ checkExistBook:',
+          checkExistBook,
+        );
 
         if (!lodash.isEmpty(checkExistBook)) {
+          console.log(
+            '🚀 ~ file: cart.service.ts:109 ~ CartService ~ createCart ~ checkExistBook : EXIST ',
+          );
           const newQuantity = checkExistBook.quantity + quantityNum;
           const newCartDetail = await this.cartDetailRepository.update(
             { book: { book_id } },
@@ -84,6 +123,9 @@ export class CartService {
           );
           return newCartDetail;
         } else {
+          console.log(
+            '🚀 ~ file: cart.service.ts:109 ~ CartService ~ createCart ~ checkExistBook : NOT EXIST',
+          );
           const bookAdd = await this.bookService.findBookById(book_id);
           const newCartDetail = await this.cartDetailRepository.save({
             book: bookAdd,
@@ -113,5 +155,15 @@ export class CartService {
     });
 
     return cart;
+  }
+
+  async handleWhenOrder(idCustomer: string) {
+    // update isCompleted is true
+    const cart = await this.getCartNotCompleted(idCustomer);
+    const cartUpdate = await this.cartRepository.save({
+      ...cart,
+      isCompleted: true,
+    });
+    return cartUpdate;
   }
 }

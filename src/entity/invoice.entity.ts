@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -17,7 +18,7 @@ export class Invoice {
   @PrimaryGeneratedColumn('uuid')
   invoice_id: string;
 
-  @Column({ type: 'date', nullable: true })
+  @CreateDateColumn()
   invoice_date: Date;
 
   @Column({ type: 'int' })
@@ -25,7 +26,7 @@ export class Invoice {
 
   @OneToOne(() => Cart)
   @JoinColumn({ name: 'cart_id' })
-  profile: Cart;
+  cart: Cart;
 
   @OneToMany(() => StatusInvoice, (statusInvoice) => statusInvoice.invoice)
   statusInvoices: StatusInvoice[];
