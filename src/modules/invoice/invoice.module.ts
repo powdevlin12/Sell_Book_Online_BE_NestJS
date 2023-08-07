@@ -8,13 +8,16 @@ import { StatusInvoice } from 'src/entity/status_invoice.entity';
 import { AtStrategy, RtStrategy } from '../auth/strategies';
 import { CartModule } from '../cart/cart.module';
 import { ReceiptInfomationModule } from '../receipt-infomation/receipt-infomation.module';
+import { Status } from 'src/entity/status.entity';
+import { PromotionModule } from '../promotion/promotion.module';
 
 @Module({
   imports: [
     JwtModule.register({}),
-    TypeOrmModule.forFeature([Invoice, StatusInvoice]),
+    TypeOrmModule.forFeature([Invoice, StatusInvoice, Status]),
     CartModule,
     ReceiptInfomationModule,
+    PromotionModule,
   ],
   controllers: [InvoiceController],
   providers: [InvoiceService, AtStrategy, RtStrategy],

@@ -38,7 +38,7 @@ export class PromotionController {
     return this.promotionService.getAllPromotionCustomer();
   }
 
-  @Get('/customer-type/:id')
+  @Get('/customer/:id')
   getCustomerType(@Param('id') id: string) {
     return this.promotionService.getPromotionCustomer(id);
   }

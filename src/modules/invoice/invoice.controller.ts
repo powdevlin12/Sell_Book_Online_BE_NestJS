@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -26,5 +27,13 @@ export class InvoiceController {
       idCustomer: user['userId'],
     };
     return this.invoiceService.createInvoice(params);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  getInvoice(@Req() req: Request) {
+    const user = req.user;
+    return this.invoiceService.getInvoiceStatusOfCustomer(user['userId']);
   }
 }

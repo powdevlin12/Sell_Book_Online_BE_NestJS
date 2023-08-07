@@ -7,6 +7,8 @@ import { Repository } from 'typeorm';
 import { CartService } from '../cart/cart.service';
 import { ErrorException } from 'src/utils/Error';
 import { ReceiptInfomationService } from '../receipt-infomation/receipt-infomation.service';
+import { Status } from 'src/entity/status.entity';
+import { PromotionService } from '../promotion/promotion.service';
 
 @Injectable()
 export class InvoiceService {
@@ -15,8 +17,11 @@ export class InvoiceService {
     private invoiceRepository: Repository<Invoice>,
     @InjectRepository(StatusInvoice)
     private statusInvoiceRepository: Repository<StatusInvoice>,
+    @InjectRepository(Status)
+    private statusRepository: Repository<Status>,
     private readonly cartService: CartService,
     private readonly receiptInfomationService: ReceiptInfomationService,
+    private readonly promotionService: PromotionService,
   ) {}
 
   calculateFeeShip(
@@ -63,19 +68,67 @@ export class InvoiceService {
         await this.receiptInfomationService.getOneReceiptInfo(
           receipt_information_id,
         );
+      // Tính tổng tiền cần trả
       const fee = this.calculateFeeShip(18, 1.9, 700000);
-
+      console.log(
+        '🚀 ~ file: invoice.service.ts:73 ~ InvoiceService ~ createInvoice ~ fee:',
+        fee,
+      );
+      // Tiền sau khi khuyến mãi
+      const percent_promotion =
+        await this.promotionService.getPromotionCustomer(idCustomer);
+      console.log(
+        '🚀 ~ file: invoice.service.ts:76 ~ InvoiceService ~ createInvoice ~ percent_promotion:',
+        percent_promotion,
+      );
+      const feeFinal = (fee * (100 - percent_promotion)) / 100;
       const invoice = await this.invoiceRepository.save({
-        total_cost: fee,
+        total_cost: Math.ceil(feeFinal),
         receiptInformation: receiptInformation,
         cart: cart,
-        invoice_date: new Date(),
       });
 
-      return invoice;
+      const status = await this.statusRepository.findOne({
+        where: { status_name: 'Chờ duyệt' },
+      });
+
+      // thêm đơn hàng với trạng thái là chờ duyệt
+      const statusInvoice = await this.statusInvoiceRepository.save({
+        invoice,
+        status,
+      });
+      // chuyển trạng thái là isCompleted của cart là true.
+      const cartUpdate = await this.cartService.handleWhenOrder(idCustomer);
+      console.log(
+        '🚀 ~ file: invoice.service.ts:88 ~ InvoiceService ~ createInvoice ~ cartUpdate:',
+        cartUpdate,
+      );
+
+      return statusInvoice;
     } catch (error) {
       console.log(error);
       throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async getInvoiceStatusOfCustomer(idCustomer: string) {
+    const statusInvoices = await this.statusInvoiceRepository.find({
+      where: {
+        invoice: {
+          cart: {
+            customer: {
+              customer_id: idCustomer,
+            },
+          },
+        },
+      },
+      relations: [
+        'invoice.cart.cartDetail',
+        'invoice.receiptInformation',
+        'staff',
+        'status',
+      ],
+    });
+    return statusInvoices;
   }
 }

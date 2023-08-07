@@ -7,6 +7,7 @@ import { StaffService } from '../staff/staff.service';
 import { CreatePromotionCustomerDTO } from './dto/create-promotion-customer';
 import { CustomerTypeService } from '../customer-type/customer-type.service';
 import { PromotionCustomer } from 'src/entity/promotion_customer.entity';
+import { CustomerService } from '../customer/customer.service';
 
 @Injectable()
 export class PromotionService {
@@ -17,6 +18,7 @@ export class PromotionService {
     private promotionCustomerRepository: Repository<PromotionCustomer>,
     private readonly staffService: StaffService,
     private readonly customerTypeService: CustomerTypeService,
+    private readonly customerService: CustomerService,
   ) {}
 
   async getPromotion(id: string) {
@@ -56,7 +58,9 @@ export class PromotionService {
     return listPromotions;
   }
 
-  async getPromotionCustomer(idCustomerType: string) {
+  async getPromotionCustomer(idCustomer: string) {
+    const customer = await this.customerService.getMySelf(idCustomer);
+
     const listPromotions = await this.promotionCustomerRepository.find({
       relations: ['customerType', 'promotion'],
       where: {
@@ -65,11 +69,18 @@ export class PromotionService {
           start_date: LessThan(new Date()),
         },
         customerType: {
-          customer_type_id: idCustomerType,
+          customer_type_id: customer.customerType.customer_type_id,
         },
       },
     });
-    return listPromotions;
+
+    const totalPercentPromotion = listPromotions.reduce(
+      (accumulator, currentValue) =>
+        accumulator + currentValue.percent_discount,
+      0,
+    );
+
+    return totalPercentPromotion;
   }
 
   async createPromotionCustomer(body: CreatePromotionCustomerDTO) {
