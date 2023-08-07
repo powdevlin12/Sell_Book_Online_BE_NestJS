@@ -69,6 +69,7 @@ export class InvoiceService {
           receipt_information_id,
         );
       // Tính tổng tiền cần trả
+      // NOTE: fake data distance and weight and totalCostBook
       const fee = this.calculateFeeShip(18, 1.9, 700000);
       console.log(
         '🚀 ~ file: invoice.service.ts:73 ~ InvoiceService ~ createInvoice ~ fee:',
@@ -125,6 +126,7 @@ export class InvoiceService {
       relations: [
         'invoice.cart.cartDetail',
         'invoice.receiptInformation',
+        'invoice.cart.cartDetail.book',
         'staff',
         'status',
       ],

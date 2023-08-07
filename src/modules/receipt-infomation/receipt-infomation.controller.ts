@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
   Req,
   UseGuards,
@@ -36,5 +37,21 @@ export class ReceiptInfomationController {
   getReceiptInfo(@Req() req: Request) {
     const user = req.user;
     return this.receiptInfomationService.getReceiptInfo(user['userId']);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch()
+  @HttpCode(HttpStatus.OK)
+  updateDefaultReceiptInfo(
+    @Req() req: Request,
+    @Body() body: { idReceipt: string },
+  ) {
+    const user = req.user;
+    const { idReceipt } = body;
+    const params = {
+      idReceipt,
+      customerId: user['userId'],
+    };
+    return this.receiptInfomationService.setDefault(params);
   }
 }
