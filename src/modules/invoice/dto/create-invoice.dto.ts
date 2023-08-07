@@ -5,8 +5,5 @@ export class CreateInvoiceDTO {
   receipt_information_id: string;
 
   @IsString()
-  cart_id: string;
-
-  @IsString()
-  distance: string;
+  feeTotal: string;
 }

@@ -1,8 +1,13 @@
 type createInvoiceParams = {
   receipt_information_id: string;
-  cart_id: string;
-  distance: string;
   idCustomer: string;
+  feeTotal: string;
 };
 
-export type { createInvoiceParams };
+type caculatorFeeParams = {
+  distance: string;
+  weight: string;
+  totalCostBook: string;
+};
+
+export type { createInvoiceParams, caculatorFeeParams };

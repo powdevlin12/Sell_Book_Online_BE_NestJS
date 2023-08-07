@@ -6,6 +6,7 @@ import { createReceiptInfoDTO } from './dto/create-receipt.dto';
 import { ErrorException } from 'src/utils/Error';
 import { CustomerService } from '../customer/customer.service';
 import { CreateReceiptInfo } from 'src/utils/params/create-cart.param';
+import { updateReceiptParams } from 'src/utils/params/receipt-info.params';
 
 @Injectable()
 export class ReceiptInfomationService {
@@ -71,6 +72,57 @@ export class ReceiptInfomationService {
         },
       });
       return receiptInfo;
+    } catch (error) {
+      console.log(error);
+      throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async getDefaultReceipt(customerId: string) {
+    const receiptInfo = await this.receiptInfoRepository.findOne({
+      where: {
+        customer: {
+          customer_id: customerId,
+        },
+        is_default: true,
+      },
+    });
+
+    return receiptInfo;
+  }
+
+  async setDefault(data: updateReceiptParams) {
+    console.log(
+      '🚀 ~ file: receipt-infomation.service.ts:82 ~ ReceiptInfomationService ~ setDefault ~ data:',
+      data,
+    );
+    const { idReceipt, customerId } = data;
+    try {
+      const receiptInfos = await this.receiptInfoRepository.update(
+        {
+          customer: {
+            customer_id: customerId,
+          },
+        },
+        { is_default: false },
+      );
+      console.log(
+        '🚀 ~ file: receipt-infomation.service.ts:92 ~ ReceiptInfomationService ~ setDefault ~ receiptInfos:',
+        receiptInfos,
+      );
+
+      const receiptUpdate = await this.receiptInfoRepository.update(
+        {
+          receipt_information_id: idReceipt,
+        },
+        {
+          is_default: true,
+        },
+      );
+
+      const newReceipt = await this.getReceiptInfo(customerId);
+
+      return newReceipt;
     } catch (error) {
       console.log(error);
       throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);

@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -35,5 +36,15 @@ export class InvoiceController {
   getInvoice(@Req() req: Request) {
     const user = req.user;
     return this.invoiceService.getInvoiceStatusOfCustomer(user['userId']);
+  }
+
+  @Get('/fee')
+  @HttpCode(HttpStatus.OK)
+  getFeeShip(
+    @Query('distance') distance: string,
+    @Query('totalCostBook') totalCostBook: string,
+    @Query('weight') weight: string,
+  ) {
+    return this.invoiceService.getFeeShip({ distance, totalCostBook, weight });
   }
 }
