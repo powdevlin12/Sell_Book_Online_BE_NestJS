@@ -40,6 +40,14 @@ export class ReceiptInfomationController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @Get('default')
+  @HttpCode(HttpStatus.OK)
+  getDefaultReceiptInfo(@Req() req: Request) {
+    const user = req.user;
+    return this.receiptInfomationService.getDefaultReceipt(user['userId']);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Patch()
   @HttpCode(HttpStatus.OK)
   updateDefaultReceiptInfo(

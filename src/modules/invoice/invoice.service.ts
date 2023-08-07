@@ -2,7 +2,10 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Invoice } from 'src/entity/invoice.entity';
 import { StatusInvoice } from 'src/entity/status_invoice.entity';
-import { createInvoiceParams } from 'src/utils/params/invoice.params';
+import {
+  caculatorFeeParams,
+  createInvoiceParams,
+} from 'src/utils/params/invoice.params';
 import { Repository } from 'typeorm';
 import { CartService } from '../cart/cart.service';
 import { ErrorException } from 'src/utils/Error';
@@ -55,8 +58,18 @@ export class InvoiceService {
     return totalCostBook + totalCost;
   }
 
+  async getFeeShip(body: caculatorFeeParams) {
+    const { distance, totalCostBook, weight } = body;
+    const feeTotal = this.calculateFeeShip(
+      Number.parseInt(distance),
+      Number.parseInt(weight),
+      Number.parseInt(totalCostBook),
+    );
+    return { feeTotal, feeShip: feeTotal - Number.parseInt(totalCostBook) };
+  }
+
   async createInvoice(data: createInvoiceParams) {
-    const { cart_id, distance, idCustomer, receipt_information_id } = data;
+    const { idCustomer, receipt_information_id, feeTotal } = data;
     console.log(
       '🚀 ~ file: invoice.service.ts:21 ~ InvoiceService ~ createInvoice ~ data:',
       data,
@@ -76,15 +89,15 @@ export class InvoiceService {
         fee,
       );
       // Tiền sau khi khuyến mãi
-      const percent_promotion =
-        await this.promotionService.getPromotionCustomer(idCustomer);
-      console.log(
-        '🚀 ~ file: invoice.service.ts:76 ~ InvoiceService ~ createInvoice ~ percent_promotion:',
-        percent_promotion,
-      );
-      const feeFinal = (fee * (100 - percent_promotion)) / 100;
+      // const percent_promotion =
+      //   await this.promotionService.getPromotionCustomer(idCustomer);
+      // console.log(
+      //   '🚀 ~ file: invoice.service.ts:76 ~ InvoiceService ~ createInvoice ~ percent_promotion:',
+      //   percent_promotion,
+      // );
+      // const feeFinal = (fee * (100 - percent_promotion)) / 100;
       const invoice = await this.invoiceRepository.save({
-        total_cost: Math.ceil(feeFinal),
+        total_cost: Math.ceil(Number.parseInt(feeTotal)),
         receiptInformation: receiptInformation,
         cart: cart,
       });
