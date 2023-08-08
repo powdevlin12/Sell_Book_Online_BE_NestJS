@@ -166,4 +166,31 @@ export class CartService {
     });
     return cartUpdate;
   }
+
+  async deleteBookInCart(idCustomer: string, book_id: string) {
+    try {
+      const cart = await this.cartRepository.findOne({
+        where: {
+          customer: {
+            customer_id: idCustomer,
+          },
+          isCompleted: false,
+        },
+      });
+
+      const cartDetail = await this.cartDetailRepository
+        .createQueryBuilder()
+        .delete()
+        .from(CartDetail)
+        .where('book_id = :bookId AND cart_id = :cartId', {
+          bookId: book_id,
+          cartId: cart.cart_id,
+        })
+        .execute();
+
+      return cartDetail;
+    } catch (error) {
+      throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 }

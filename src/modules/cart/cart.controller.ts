@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Req,
   UseGuards,
@@ -38,5 +40,13 @@ export class CartController {
   getCartForCustomer(@Req() req: Request) {
     const user = req.user;
     return this.cartService.getAllCartForCustomer(user['userId']);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete('/:book_id')
+  @HttpCode(HttpStatus.OK)
+  deleteBookInCart(@Req() req: Request, @Param('book_id') book_id: string) {
+    const user = req.user;
+    return this.cartService.deleteBookInCart(user['userId'], book_id);
   }
 }
