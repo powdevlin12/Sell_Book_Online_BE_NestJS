@@ -24,6 +24,9 @@ export class Invoice {
   @Column({ type: 'int' })
   total_cost: number;
 
+  @Column({ type: 'int', nullable: true })
+  feeShip: number;
+
   @OneToOne(() => Cart)
   @JoinColumn({ name: 'cart_id' })
   cart: Cart;

@@ -91,7 +91,7 @@ export class InvoiceService {
   }
 
   async createInvoice(data: createInvoiceParams) {
-    const { idCustomer, receipt_information_id, feeTotal } = data;
+    const { idCustomer, receipt_information_id, feeTotal, feeShip } = data;
     console.log(
       '🚀 ~ file: invoice.service.ts:21 ~ InvoiceService ~ createInvoice ~ data:',
       data,
@@ -117,6 +117,7 @@ export class InvoiceService {
 
       const invoice = await this.invoiceRepository.save({
         total_cost: Math.ceil(Number.parseInt(feeTotal)),
+        feeShip: Number.parseInt(feeShip),
         receiptInformation: receiptInformation,
         cart: cart,
       });

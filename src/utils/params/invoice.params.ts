@@ -2,6 +2,7 @@ type createInvoiceParams = {
   receipt_information_id: string;
   idCustomer: string;
   feeTotal: string;
+  feeShip: string;
 };
 
 type caculatorFeeParams = {
