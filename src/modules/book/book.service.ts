@@ -59,7 +59,8 @@ export class BookService {
   // SEARCH BOOK
   // Search by attributes
   async searchBookByAttributes(body: SearchBookByAttributesDTO) {
-    const { author, bookName, publisher, typeBook, yearRelease } = body;
+    // const { author, bookName, publisher, typeBook, yearRelease } = body;
+    const { query } = body;
     const results = [];
     const weight = {
       bookName: 5,
@@ -72,46 +73,40 @@ export class BookService {
       const books = await this.findAllBooks();
       for (const book of books) {
         let score = 0;
-        if (
-          bookName &&
-          convertVNtoEn(book.book_name).includes(convertVNtoEn(bookName))
-        ) {
-          score += weight.bookName;
-        }
+        if (query) {
+          if (convertVNtoEn(book.book_name).includes(convertVNtoEn(query))) {
+            score += weight.bookName;
+          }
 
-        if (
-          typeBook &&
-          convertVNtoEn(book.bookType.book_type_name).includes(
-            convertVNtoEn(typeBook),
-          )
-        ) {
-          score += weight.typeBook;
-        }
+          if (
+            convertVNtoEn(book.bookType.book_type_name).includes(
+              convertVNtoEn(query),
+            )
+          ) {
+            score += weight.typeBook;
+          }
 
-        if (author) {
           const bookValid = book.authors.filter((authorB) =>
             convertVNtoEn(
               `${authorB.first_name} ${authorB.last_name}`,
-            ).includes(convertVNtoEn(author)),
+            ).includes(convertVNtoEn(query)),
           );
           if (bookValid.length > 0) {
             score += weight.author;
           }
-        }
 
-        if (
-          publisher &&
-          convertVNtoEn(book.publishers.name).includes(convertVNtoEn(publisher))
-        ) {
-          score += weight.publisher;
-        }
+          if (
+            convertVNtoEn(book.publishers.name).includes(convertVNtoEn(query))
+          ) {
+            score += weight.publisher;
+          }
 
-        if (
-          yearRelease &&
-          Number.parseInt(yearRelease) ===
+          if (
+            Number.parseInt(query) ===
             new Date(book?.release_year)?.getFullYear()
-        ) {
-          score += weight.yearRelease;
+          ) {
+            score += weight.yearRelease;
+          }
         }
 
         if (score > 0) {
