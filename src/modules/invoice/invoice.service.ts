@@ -12,6 +12,7 @@ import { ErrorException } from 'src/utils/Error';
 import { ReceiptInfomationService } from '../receipt-infomation/receipt-infomation.service';
 import { Status } from 'src/entity/status.entity';
 import { PromotionService } from '../promotion/promotion.service';
+import { Book } from 'src/entity/book.entity';
 
 @Injectable()
 export class InvoiceService {
@@ -22,6 +23,8 @@ export class InvoiceService {
     private statusInvoiceRepository: Repository<StatusInvoice>,
     @InjectRepository(Status)
     private statusRepository: Repository<Status>,
+    @InjectRepository(Book)
+    private bookRepository: Repository<Book>,
     private readonly cartService: CartService,
     private readonly receiptInfomationService: ReceiptInfomationService,
     private readonly promotionService: PromotionService,
@@ -68,6 +71,25 @@ export class InvoiceService {
     return { feeTotal, feeShip: feeTotal - Number.parseInt(totalCostBook) };
   }
 
+  async updateQuantityBook(quantity: number, idBook: string) {
+    try {
+      const book = await this.bookRepository.findOne({
+        where: { book_id: idBook },
+      });
+      const updateBook = await this.bookRepository.update(
+        {
+          book_id: idBook,
+        },
+        {
+          quantity_in_stock: book.quantity_in_stock - quantity,
+        },
+      );
+      return updateBook;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async createInvoice(data: createInvoiceParams) {
     const { idCustomer, receipt_information_id, feeTotal } = data;
     console.log(
@@ -77,6 +99,10 @@ export class InvoiceService {
 
     try {
       const cart = await this.cartService.getCartNotCompleted(idCustomer);
+      console.log(
+        '🚀 ~ file: invoice.service.ts:102 ~ InvoiceService ~ createInvoice ~ cart:',
+        cart,
+      );
       const receiptInformation =
         await this.receiptInfomationService.getOneReceiptInfo(
           receipt_information_id,
@@ -88,14 +114,7 @@ export class InvoiceService {
         '🚀 ~ file: invoice.service.ts:73 ~ InvoiceService ~ createInvoice ~ fee:',
         fee,
       );
-      // Tiền sau khi khuyến mãi
-      // const percent_promotion =
-      //   await this.promotionService.getPromotionCustomer(idCustomer);
-      // console.log(
-      //   '🚀 ~ file: invoice.service.ts:76 ~ InvoiceService ~ createInvoice ~ percent_promotion:',
-      //   percent_promotion,
-      // );
-      // const feeFinal = (fee * (100 - percent_promotion)) / 100;
+
       const invoice = await this.invoiceRepository.save({
         total_cost: Math.ceil(Number.parseInt(feeTotal)),
         receiptInformation: receiptInformation,
@@ -117,6 +136,12 @@ export class InvoiceService {
         '🚀 ~ file: invoice.service.ts:88 ~ InvoiceService ~ createInvoice ~ cartUpdate:',
         cartUpdate,
       );
+      // trừ số lượng sách còn lại
+      const { cartDetail } = cart;
+
+      cartDetail.forEach((detail) => {
+        this.updateQuantityBook(detail.quantity, detail.book.book_id);
+      });
 
       return statusInvoice;
     } catch (error) {

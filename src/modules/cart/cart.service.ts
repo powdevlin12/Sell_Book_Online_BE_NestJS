@@ -24,10 +24,7 @@ export class CartService {
 
   async getCartNotCompleted(customer_id: string) {
     const cart = await this.cartRepository.findOne({
-      relations: {
-        customer: true,
-        cartDetail: true,
-      },
+      relations: ['customer', 'cartDetail', 'cartDetail.book'],
       where: {
         customer: {
           customer_id: customer_id,
