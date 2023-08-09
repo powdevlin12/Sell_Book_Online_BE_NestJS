@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Param, Get } from '@nestjs/common';
 import { CreateBookDTO } from './dto/create-book.dto';
 import { BookService } from './book.service';
+import { SearchBookByAttributesDTO } from './dto/search-attribute.dto';
 
 @Controller('book')
 export class BookController {
@@ -18,5 +19,12 @@ export class BookController {
   @Get('/:id')
   getBookById(@Param('id') id: string) {
     return this.bookService.findBookById(id);
+  }
+
+  //SEARCH BOOKS
+  // search by attributes
+  @Post('/search-attributes')
+  searchBookByAttributes(@Body() body: SearchBookByAttributesDTO) {
+    return this.bookService.searchBookByAttributes(body);
   }
 }
