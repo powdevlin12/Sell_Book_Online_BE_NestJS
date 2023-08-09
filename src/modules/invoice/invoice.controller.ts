@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
   Query,
   Req,
@@ -13,6 +14,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { InvoiceService } from './invoice.service';
 import { CreateInvoiceDTO } from './dto/create-invoice.dto';
+import { PatchStatusInvoice } from './dto/patch-status-invoice';
 
 @Controller('invoice')
 export class InvoiceController {
@@ -46,5 +48,16 @@ export class InvoiceController {
     @Query('weight') weight: string,
   ) {
     return this.invoiceService.getFeeShip({ distance, totalCostBook, weight });
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('/status-invoice')
+  @HttpCode(HttpStatus.OK)
+  staffChangeStatus(@Req() req: Request, @Body() body: PatchStatusInvoice) {
+    const user = req.user;
+    return this.invoiceService.staffChangeStatus({
+      ...body,
+      staffId: user['userId'],
+    });
   }
 }

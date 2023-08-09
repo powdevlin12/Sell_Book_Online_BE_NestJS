@@ -11,6 +11,7 @@ import { ReceiptInfomationModule } from '../receipt-infomation/receipt-infomatio
 import { Status } from 'src/entity/status.entity';
 import { PromotionModule } from '../promotion/promotion.module';
 import { Book } from 'src/entity/book.entity';
+import { StaffModule } from '../staff/staff.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { Book } from 'src/entity/book.entity';
     CartModule,
     ReceiptInfomationModule,
     PromotionModule,
+    StaffModule,
   ],
   controllers: [InvoiceController],
   providers: [InvoiceService, AtStrategy, RtStrategy],

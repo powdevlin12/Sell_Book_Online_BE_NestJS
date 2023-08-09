@@ -4,6 +4,7 @@ import { Invoice } from 'src/entity/invoice.entity';
 import { StatusInvoice } from 'src/entity/status_invoice.entity';
 import {
   caculatorFeeParams,
+  changeStatusInvoice,
   createInvoiceParams,
 } from 'src/utils/params/invoice.params';
 import { Repository } from 'typeorm';
@@ -13,6 +14,7 @@ import { ReceiptInfomationService } from '../receipt-infomation/receipt-infomati
 import { Status } from 'src/entity/status.entity';
 import { PromotionService } from '../promotion/promotion.service';
 import { Book } from 'src/entity/book.entity';
+import { StaffService } from '../staff/staff.service';
 
 @Injectable()
 export class InvoiceService {
@@ -28,6 +30,7 @@ export class InvoiceService {
     private readonly cartService: CartService,
     private readonly receiptInfomationService: ReceiptInfomationService,
     private readonly promotionService: PromotionService,
+    private readonly staffService: StaffService,
   ) {}
 
   calculateFeeShip(
@@ -171,5 +174,46 @@ export class InvoiceService {
       ],
     });
     return statusInvoices;
+  }
+
+  async staffChangeStatus(data: changeStatusInvoice) {
+    const { staffId, status_id, status_invoice_id } = data;
+
+    try {
+      const staff = await this.staffService.getMySelf(staffId);
+      if (!staff) {
+        throw new ErrorException(
+          'Không tìm thấy nhân viên này',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      const status = await this.statusRepository.findOne({
+        where: {
+          status_id,
+        },
+      });
+
+      if (!status) {
+        throw new ErrorException(
+          'Không có trạng thái này',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      const updateStatus = await this.statusInvoiceRepository.update(
+        {
+          status_invoice_id,
+        },
+        {
+          status,
+          staff,
+        },
+      );
+
+      return updateStatus;
+    } catch (error) {
+      console.log(error);
+      throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 }
