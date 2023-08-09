@@ -37,6 +37,7 @@ export class BookService {
 
   async createBook(body: CreateBookDTO) {
     const { book_type_id, publisher_id, list_authors_id, ...rest } = body;
+    console.log('book weight : ', body.weight);
     try {
       const publisher = await this.publisherService.getPublisher(publisher_id);
       const book_type = await this.bookTypeService.getBookType(book_type_id);
@@ -119,5 +120,36 @@ export class BookService {
       console.log(error);
       throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  // search by tags
+  async searchBookByTags(body: { tags: string }) {
+    const { tags } = body;
+    const listTags = tags.split(' ');
+
+    try {
+      const books = await this.findAllBooks();
+      const results = [];
+      for (const book of books) {
+        let score = 0;
+        const bookTags = convertVNtoEn(book.tag.replace(/,/g, '')).split(' ');
+
+        for (const tag of listTags) {
+          if (bookTags.includes(convertVNtoEn(tag))) {
+            score += 1;
+          }
+        }
+
+        if (score > 0) {
+          results.push({ book, score });
+        }
+      }
+      results.sort((a, b) => b.score - a.score);
+      return results;
+    } catch (error) {
+      console.log(error);
+      throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);
+    }
+    return listTags;
   }
 }

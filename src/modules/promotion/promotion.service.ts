@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Promotion } from 'src/entity/promotion.entity';
 import { LessThan, MoreThan, Repository } from 'typeorm';
@@ -8,6 +8,7 @@ import { CreatePromotionCustomerDTO } from './dto/create-promotion-customer';
 import { CustomerTypeService } from '../customer-type/customer-type.service';
 import { PromotionCustomer } from 'src/entity/promotion_customer.entity';
 import { CustomerService } from '../customer/customer.service';
+import { ErrorException } from 'src/utils/Error';
 
 @Injectable()
 export class PromotionService {
@@ -73,6 +74,10 @@ export class PromotionService {
         },
       },
     });
+    console.log(
+      '🚀 ~ file: promotion.service.ts:76 ~ PromotionService ~ getPromotionCustomer ~ listPromotions:',
+      listPromotions,
+    );
 
     const totalPercentPromotion = listPromotions.reduce(
       (accumulator, currentValue) =>
@@ -92,6 +97,12 @@ export class PromotionService {
 
       const promotion = await this.getPromotion(promotion_id);
 
+      if (!promotion) {
+        throw new ErrorException(
+          'Không tìm thấy khuyến mãi này',
+          HttpStatus.NOT_FOUND,
+        );
+      }
       const promotionCustomer = await this.promotionCustomerRepository.save({
         percent_discount: Number.parseInt(percent_discount),
         customerType,

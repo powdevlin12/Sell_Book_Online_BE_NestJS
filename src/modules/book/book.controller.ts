@@ -27,4 +27,10 @@ export class BookController {
   searchBookByAttributes(@Body() body: SearchBookByAttributesDTO) {
     return this.bookService.searchBookByAttributes(body);
   }
+
+  // search by tags
+  @Post('/search-tag')
+  searchBookByTags(@Body() body: { tags: string }) {
+    return this.bookService.searchBookByTags(body);
+  }
 }
