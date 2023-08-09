@@ -85,6 +85,7 @@ export class InvoiceService {
         },
         {
           quantity_in_stock: book.quantity_in_stock - quantity,
+          quantity_sold: book.quantity_sold + quantity,
         },
       );
       return updateBook;

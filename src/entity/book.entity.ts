@@ -41,6 +41,9 @@ export class Book {
   @Column({ type: 'int' })
   quantity_in_stock: number;
 
+  @Column({ type: 'int', nullable: true, default: 0 })
+  quantity_sold: number;
+
   @Column({ type: 'float' })
   weight: number;
 

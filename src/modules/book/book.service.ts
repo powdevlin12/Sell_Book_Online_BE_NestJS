@@ -125,6 +125,10 @@ export class BookService {
   // search by tags
   async searchBookByTags(body: { tags: string }) {
     const { tags } = body;
+    console.log(
+      '🚀 ~ file: book.service.ts:129 ~ BookService ~ searchBookByTags ~ tags:',
+      tags,
+    );
     const listTags = tags.split(' ');
 
     try {
