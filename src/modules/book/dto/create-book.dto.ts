@@ -37,6 +37,9 @@ export class CreateBookDTO {
   publisher_id: string;
 
   @IsString()
+  tag: string;
+
+  @IsString()
   book_type_id: string;
 
   @IsArray()

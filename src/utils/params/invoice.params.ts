@@ -2,6 +2,7 @@ type createInvoiceParams = {
   receipt_information_id: string;
   idCustomer: string;
   feeTotal: string;
+  feeShip: string;
 };
 
 type caculatorFeeParams = {
@@ -10,4 +11,10 @@ type caculatorFeeParams = {
   totalCostBook: string;
 };
 
-export type { createInvoiceParams, caculatorFeeParams };
+type changeStatusInvoice = {
+  status_invoice_id: string;
+  status_id: string;
+  staffId: string;
+};
+
+export type { createInvoiceParams, caculatorFeeParams, changeStatusInvoice };

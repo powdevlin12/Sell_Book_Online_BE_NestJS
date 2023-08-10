@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateInvoiceDTO {
   @IsString()
@@ -6,4 +6,8 @@ export class CreateInvoiceDTO {
 
   @IsString()
   feeTotal: string;
+
+  @IsString()
+  @IsOptional()
+  feeShip: string;
 }

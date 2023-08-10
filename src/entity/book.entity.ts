@@ -8,7 +8,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Tag } from './tag.entity';
 import { Rate } from './rate.entity';
 import { Publisher } from './publisher.entity';
 import { Author } from './author.entity';
@@ -27,6 +26,9 @@ export class Book {
   @Column({ type: 'nvarchar', length: 300 })
   description: string;
 
+  @Column({ type: 'nvarchar', length: 300 })
+  tag: string;
+
   @Column({ type: 'int' })
   pages: number;
 
@@ -39,11 +41,8 @@ export class Book {
   @Column({ type: 'int' })
   quantity_in_stock: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'float' })
   weight: number;
-
-  @OneToMany(() => Tag, (tag) => tag.book)
-  tags: Tag[];
 
   @OneToMany(() => Rate, (rate) => rate.book)
   rates: Rate[];

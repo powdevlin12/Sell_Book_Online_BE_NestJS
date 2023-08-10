@@ -10,14 +10,17 @@ import { CartModule } from '../cart/cart.module';
 import { ReceiptInfomationModule } from '../receipt-infomation/receipt-infomation.module';
 import { Status } from 'src/entity/status.entity';
 import { PromotionModule } from '../promotion/promotion.module';
+import { Book } from 'src/entity/book.entity';
+import { StaffModule } from '../staff/staff.module';
 
 @Module({
   imports: [
     JwtModule.register({}),
-    TypeOrmModule.forFeature([Invoice, StatusInvoice, Status]),
+    TypeOrmModule.forFeature([Invoice, StatusInvoice, Status, Book]),
     CartModule,
     ReceiptInfomationModule,
     PromotionModule,
+    StaffModule,
   ],
   controllers: [InvoiceController],
   providers: [InvoiceService, AtStrategy, RtStrategy],

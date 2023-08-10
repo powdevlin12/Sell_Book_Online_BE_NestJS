@@ -16,7 +16,7 @@ export class CartDetail {
   @Column({ type: 'int' })
   total_price: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'float' })
   total_weight: number;
 
   @Column({ type: 'int' })

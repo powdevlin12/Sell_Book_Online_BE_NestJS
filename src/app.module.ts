@@ -7,14 +7,12 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { Book } from './entity/book.entity';
 import { BookType } from './entity/type_book.entity';
 import { Publisher } from './entity/publisher.entity';
-import { Tag } from './entity/tag.entity';
 import { Rate } from './entity/rate.entity';
 import { BookTypeModule } from './modules/book_type/book_type.module';
 import { PublisherModule } from './modules/publisher/publisher.module';
 import { BookModule } from './modules/book/book.module';
 import { Author } from './entity/author.entity';
 import { AuthorModule } from './modules/author/author.module';
-import { TagModule } from './modules/tag/tag.module';
 import { RateController } from './modules/rate/rate.controller';
 import { RateModule } from './modules/rate/rate.module';
 import { RateService } from './modules/rate/rate.service';
@@ -56,7 +54,6 @@ import { InvoiceModule } from './modules/invoice/invoice.module';
         Book,
         BookType,
         Publisher,
-        Tag,
         Rate,
         Author,
         Customer,
@@ -78,7 +75,6 @@ import { InvoiceModule } from './modules/invoice/invoice.module';
     PublisherModule,
     BookModule,
     AuthorModule,
-    TagModule,
     RateModule,
     AuthModule,
     CustomerModule,

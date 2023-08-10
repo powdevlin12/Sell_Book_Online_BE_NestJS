@@ -4,6 +4,7 @@ import { Invoice } from 'src/entity/invoice.entity';
 import { StatusInvoice } from 'src/entity/status_invoice.entity';
 import {
   caculatorFeeParams,
+  changeStatusInvoice,
   createInvoiceParams,
 } from 'src/utils/params/invoice.params';
 import { Repository } from 'typeorm';
@@ -12,6 +13,8 @@ import { ErrorException } from 'src/utils/Error';
 import { ReceiptInfomationService } from '../receipt-infomation/receipt-infomation.service';
 import { Status } from 'src/entity/status.entity';
 import { PromotionService } from '../promotion/promotion.service';
+import { Book } from 'src/entity/book.entity';
+import { StaffService } from '../staff/staff.service';
 
 @Injectable()
 export class InvoiceService {
@@ -22,9 +25,12 @@ export class InvoiceService {
     private statusInvoiceRepository: Repository<StatusInvoice>,
     @InjectRepository(Status)
     private statusRepository: Repository<Status>,
+    @InjectRepository(Book)
+    private bookRepository: Repository<Book>,
     private readonly cartService: CartService,
     private readonly receiptInfomationService: ReceiptInfomationService,
     private readonly promotionService: PromotionService,
+    private readonly staffService: StaffService,
   ) {}
 
   calculateFeeShip(
@@ -68,8 +74,27 @@ export class InvoiceService {
     return { feeTotal, feeShip: feeTotal - Number.parseInt(totalCostBook) };
   }
 
+  async updateQuantityBook(quantity: number, idBook: string) {
+    try {
+      const book = await this.bookRepository.findOne({
+        where: { book_id: idBook },
+      });
+      const updateBook = await this.bookRepository.update(
+        {
+          book_id: idBook,
+        },
+        {
+          quantity_in_stock: book.quantity_in_stock - quantity,
+        },
+      );
+      return updateBook;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async createInvoice(data: createInvoiceParams) {
-    const { idCustomer, receipt_information_id, feeTotal } = data;
+    const { idCustomer, receipt_information_id, feeTotal, feeShip } = data;
     console.log(
       '🚀 ~ file: invoice.service.ts:21 ~ InvoiceService ~ createInvoice ~ data:',
       data,
@@ -77,6 +102,10 @@ export class InvoiceService {
 
     try {
       const cart = await this.cartService.getCartNotCompleted(idCustomer);
+      console.log(
+        '🚀 ~ file: invoice.service.ts:102 ~ InvoiceService ~ createInvoice ~ cart:',
+        cart,
+      );
       const receiptInformation =
         await this.receiptInfomationService.getOneReceiptInfo(
           receipt_information_id,
@@ -88,16 +117,10 @@ export class InvoiceService {
         '🚀 ~ file: invoice.service.ts:73 ~ InvoiceService ~ createInvoice ~ fee:',
         fee,
       );
-      // Tiền sau khi khuyến mãi
-      // const percent_promotion =
-      //   await this.promotionService.getPromotionCustomer(idCustomer);
-      // console.log(
-      //   '🚀 ~ file: invoice.service.ts:76 ~ InvoiceService ~ createInvoice ~ percent_promotion:',
-      //   percent_promotion,
-      // );
-      // const feeFinal = (fee * (100 - percent_promotion)) / 100;
+
       const invoice = await this.invoiceRepository.save({
         total_cost: Math.ceil(Number.parseInt(feeTotal)),
+        feeShip: Number.parseInt(feeShip),
         receiptInformation: receiptInformation,
         cart: cart,
       });
@@ -117,6 +140,12 @@ export class InvoiceService {
         '🚀 ~ file: invoice.service.ts:88 ~ InvoiceService ~ createInvoice ~ cartUpdate:',
         cartUpdate,
       );
+      // trừ số lượng sách còn lại
+      const { cartDetail } = cart;
+
+      cartDetail.forEach((detail) => {
+        this.updateQuantityBook(detail.quantity, detail.book.book_id);
+      });
 
       return statusInvoice;
     } catch (error) {
@@ -145,5 +174,46 @@ export class InvoiceService {
       ],
     });
     return statusInvoices;
+  }
+
+  async staffChangeStatus(data: changeStatusInvoice) {
+    const { staffId, status_id, status_invoice_id } = data;
+
+    try {
+      const staff = await this.staffService.getMySelf(staffId);
+      if (!staff) {
+        throw new ErrorException(
+          'Không tìm thấy nhân viên này',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      const status = await this.statusRepository.findOne({
+        where: {
+          status_id,
+        },
+      });
+
+      if (!status) {
+        throw new ErrorException(
+          'Không có trạng thái này',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      const updateStatus = await this.statusInvoiceRepository.update(
+        {
+          status_invoice_id,
+        },
+        {
+          status,
+          staff,
+        },
+      );
+
+      return updateStatus;
+    } catch (error) {
+      console.log(error);
+      throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 }
