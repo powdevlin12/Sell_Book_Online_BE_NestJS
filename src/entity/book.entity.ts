@@ -47,8 +47,11 @@ export class Book {
   @Column({ type: 'float' })
   weight: number;
 
-  @OneToMany(() => Rate, (rate) => rate.book)
-  rates: Rate[];
+  @Column({ type: 'int', nullable: true, default: 0 })
+  total_star: number;
+
+  @Column({ type: 'int', nullable: true, default: 0 })
+  total_rate: number;
 
   @ManyToOne(() => Publisher, (publisher) => publisher.books, {
     cascade: ['remove'],

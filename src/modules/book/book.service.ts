@@ -9,6 +9,7 @@ import { AuthorService } from '../author/author.service';
 import { SearchBookByAttributesDTO } from './dto/search-attribute.dto';
 import { ErrorException } from 'src/utils/Error';
 import { convertVNtoEn } from '../../utils/helper';
+import { CartDetailService } from '../cart-detail/cart-detail.service';
 
 @Injectable()
 export class BookService {
@@ -16,6 +17,7 @@ export class BookService {
     private readonly bookTypeService: BookTypeService,
     private readonly publisherService: PublisherService,
     private readonly authorService: AuthorService,
+    private readonly cartDetailService: CartDetailService,
     @InjectRepository(Book)
     private bookRepository: Repository<Book>,
   ) {}
@@ -32,7 +34,19 @@ export class BookService {
       where: { book_id: id },
       relations: ['bookType', 'publishers', 'authors'],
     });
+
     return book;
+  }
+
+  async findBookDetail(id: string) {
+    const book = await this.bookRepository.findOne({
+      where: { book_id: id },
+      relations: ['bookType', 'publishers', 'authors'],
+    });
+
+    const rates = await this.cartDetailService.getRateForBook(id);
+
+    return { book, rates };
   }
 
   async createBook(body: CreateBookDTO) {

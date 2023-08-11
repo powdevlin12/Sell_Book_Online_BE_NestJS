@@ -50,6 +50,7 @@ export class InvoiceController {
     return this.invoiceService.getFeeShip({ distance, totalCostBook, weight });
   }
 
+  // staff change status invoice
   @UseGuards(AuthGuard('jwt'))
   @Patch('/status-invoice')
   @HttpCode(HttpStatus.OK)

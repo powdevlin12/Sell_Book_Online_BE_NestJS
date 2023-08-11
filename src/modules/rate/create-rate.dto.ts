@@ -6,9 +6,9 @@ export class createRateDTO {
   @MaxLength(300)
   comment: string;
 
-  @Transform(({ value }) => Number.parseInt(value))
-  star: number;
+  @IsString()
+  star: string;
 
   @IsString()
-  book_id: string;
+  cart_detail_id: string;
 }

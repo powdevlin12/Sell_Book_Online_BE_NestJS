@@ -170,6 +170,7 @@ export class InvoiceService {
         'invoice.cart.cartDetail',
         'invoice.receiptInformation',
         'invoice.cart.cartDetail.book',
+        'invoice.cart.cartDetail.rate',
         'staff',
         'status',
       ],
