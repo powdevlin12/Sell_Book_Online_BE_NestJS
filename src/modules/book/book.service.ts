@@ -10,6 +10,7 @@ import { SearchBookByAttributesDTO } from './dto/search-attribute.dto';
 import { ErrorException } from 'src/utils/Error';
 import { convertVNtoEn } from '../../utils/helper';
 import { CartDetailService } from '../cart-detail/cart-detail.service';
+import { SearchBookByAttributesAdvancedDTO } from './dto/search-attribute-advanced.dto';
 
 @Injectable()
 export class BookService {
@@ -136,6 +137,77 @@ export class BookService {
     }
   }
 
+  // Search by attributes Advanced Search
+  async searchBookByAttributesAdvanced(
+    body: SearchBookByAttributesAdvancedDTO,
+  ) {
+    const { author, bookName, publisher, typeBook, yearRelease } = body;
+    // const { query } = body;
+    const results = [];
+    const weight = {
+      bookName: 5,
+      typeBook: 4,
+      author: 3,
+      publisher: 2,
+      yearRelease: 1,
+    };
+    try {
+      const books = await this.findAllBooks();
+      for (const book of books) {
+        let score = 0;
+        if (
+          bookName &&
+          convertVNtoEn(book.book_name).includes(convertVNtoEn(bookName))
+        ) {
+          score += weight.bookName;
+        }
+
+        if (
+          typeBook &&
+          convertVNtoEn(book.bookType.book_type_name).includes(
+            convertVNtoEn(typeBook),
+          )
+        ) {
+          score += weight.typeBook;
+        }
+
+        if (author) {
+          const bookValid = book.authors.filter((authorB) =>
+            convertVNtoEn(
+              `${authorB.first_name} ${authorB.last_name}`,
+            ).includes(convertVNtoEn(author)),
+          );
+          if (bookValid.length > 0) {
+            score += weight.author;
+          }
+        }
+
+        if (
+          publisher &&
+          convertVNtoEn(book.publishers.name).includes(convertVNtoEn(publisher))
+        ) {
+          score += weight.publisher;
+        }
+
+        if (
+          yearRelease &&
+          Number.parseInt(yearRelease) ===
+            new Date(book?.release_year)?.getFullYear()
+        ) {
+          score += weight.yearRelease;
+        }
+
+        if (score > 0) {
+          results.push({ book, score });
+        }
+      }
+      results.sort((a, b) => b.score - a.score);
+      return results;
+    } catch (error) {
+      console.log(error);
+      throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
   // search by tags
   async searchBookByTags(body: { tags: string }) {
     const { tags } = body;

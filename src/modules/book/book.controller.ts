@@ -2,6 +2,7 @@ import { Body, Controller, Post, Param, Get } from '@nestjs/common';
 import { CreateBookDTO } from './dto/create-book.dto';
 import { BookService } from './book.service';
 import { SearchBookByAttributesDTO } from './dto/search-attribute.dto';
+import { SearchBookByAttributesAdvancedDTO } from './dto/search-attribute-advanced.dto';
 
 @Controller('book')
 export class BookController {
@@ -26,6 +27,14 @@ export class BookController {
   @Post('/search-attributes')
   searchBookByAttributes(@Body() body: SearchBookByAttributesDTO) {
     return this.bookService.searchBookByAttributes(body);
+  }
+
+  // search by attributes
+  @Post('/search-attributes-advanced')
+  searchBookByAttributesAdvance(
+    @Body() body: SearchBookByAttributesAdvancedDTO,
+  ) {
+    return this.bookService.searchBookByAttributesAdvanced(body);
   }
 
   // search by tags
