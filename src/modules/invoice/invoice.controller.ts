@@ -61,4 +61,10 @@ export class InvoiceController {
       staffId: user['userId'],
     });
   }
+
+  @Get('/status-invoice')
+  @HttpCode(HttpStatus.OK)
+  getAllInvoiceForStaff() {
+    return this.invoiceService.getAllInvoiceForStaff();
+  }
 }

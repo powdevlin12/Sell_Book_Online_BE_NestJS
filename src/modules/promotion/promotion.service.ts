@@ -46,7 +46,16 @@ export class PromotionService {
     }
   }
 
-  async getAllPromotionCustomer() {
+  async getAllPromotion() {
+    const listPromotions = await this.promotionRepository.find({
+      relations: {
+        staff_id_create: true,
+      },
+    });
+    return listPromotions;
+  }
+
+  async getAllPromotionCustomerValid() {
     const listPromotions = await this.promotionCustomerRepository.find({
       relations: ['customerType', 'promotion'],
       where: {
@@ -55,6 +64,13 @@ export class PromotionService {
           start_date: LessThan(new Date()),
         },
       },
+    });
+    return listPromotions;
+  }
+
+  async getAllPromotionCustomer() {
+    const listPromotions = await this.promotionCustomerRepository.find({
+      relations: ['customerType', 'promotion'],
     });
     return listPromotions;
   }

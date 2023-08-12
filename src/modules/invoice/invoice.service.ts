@@ -218,4 +218,20 @@ export class InvoiceService {
       throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
+  async getAllInvoiceForStaff() {
+    try {
+      const statusInvoice = await this.statusInvoiceRepository.find({
+        relations: [
+          'status',
+          'invoice.receiptInformation',
+          'invoice.cart.cartDetail.book',
+        ],
+      });
+      return statusInvoice;
+    } catch (error) {
+      console.log(error);
+      throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 }

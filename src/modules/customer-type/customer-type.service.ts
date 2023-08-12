@@ -22,4 +22,9 @@ export class CustomerTypeService {
 
     return customerType;
   }
+
+  async getAllCustomerType() {
+    const customerType = await this.customerTypeRepository.find();
+    return customerType;
+  }
 }
