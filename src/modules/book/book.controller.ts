@@ -29,11 +29,15 @@ export class BookController {
     return this.bookService.searchBookByAttributes(body);
   }
 
-  // search by attributes
+  // search by attributes advanced
   @Post('/search-attributes-advanced')
   searchBookByAttributesAdvance(
     @Body() body: SearchBookByAttributesAdvancedDTO,
   ) {
+    console.log(
+      '🚀 ~ file: book.controller.ts:37 ~ BookController ~ body:',
+      body,
+    );
     return this.bookService.searchBookByAttributesAdvanced(body);
   }
 
@@ -41,5 +45,11 @@ export class BookController {
   @Post('/search-tag')
   searchBookByTags(@Body() body: { tags: string }) {
     return this.bookService.searchBookByTags(body);
+  }
+
+  // search by rate
+  @Post('/search-rate')
+  searchBookByRate(@Body() body: { query: string }) {
+    return this.bookService.searchByRate(body.query);
   }
 }

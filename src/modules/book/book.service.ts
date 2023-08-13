@@ -242,4 +242,75 @@ export class BookService {
     }
     return listTags;
   }
+
+  // search by rate
+  async searchByRate(query: string) {
+    const results = [];
+    const weight = {
+      bookName: 5,
+      typeBook: 4,
+      author: 3,
+      publisher: 2,
+      yearRelease: 1,
+    };
+    try {
+      const books = await this.findAllBooks();
+      for (const book of books) {
+        let score = 0;
+        if (query) {
+          if (convertVNtoEn(book.book_name).includes(convertVNtoEn(query))) {
+            score += weight.bookName;
+          }
+
+          if (
+            convertVNtoEn(book.bookType.book_type_name).includes(
+              convertVNtoEn(query),
+            )
+          ) {
+            score += weight.typeBook;
+          }
+
+          const bookValid = book.authors.filter((authorB) =>
+            convertVNtoEn(
+              `${authorB.first_name} ${authorB.last_name}`,
+            ).includes(convertVNtoEn(query)),
+          );
+          if (bookValid.length > 0) {
+            score += weight.author;
+          }
+
+          if (
+            convertVNtoEn(book.publishers.name).includes(convertVNtoEn(query))
+          ) {
+            score += weight.publisher;
+          }
+
+          if (
+            Number.parseInt(query) ===
+            new Date(book?.release_year)?.getFullYear()
+          ) {
+            score += weight.yearRelease;
+          }
+        }
+
+        if (score > 0) {
+          results.push({ book, score });
+        }
+      }
+      for (const result of results) {
+        if (result.book.total_rate !== 0) {
+          result.score =
+            result.score +
+            result.book.total_star / result.book.total_rate +
+            result.book.quantity_sold / 100;
+        }
+      }
+      results.sort((a, b) => b.score - a.score);
+
+      return results;
+    } catch (error) {
+      console.log(error);
+      throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 }
