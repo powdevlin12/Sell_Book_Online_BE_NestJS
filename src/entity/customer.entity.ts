@@ -10,6 +10,7 @@ import {
 import { CustomerType } from './customer_type.entity';
 import { ReceiptInformation } from './receipt_information';
 import { Cart } from './cart.entity';
+import { Rate } from './rate.entity';
 
 @Entity({ name: 'customer' })
 export class Customer {

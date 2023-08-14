@@ -61,20 +61,43 @@ export class AuthService {
     };
   }
 
-  async signupLocal(dto: createCustomerDTO): Promise<Tokens> {
+  async signupLocal(dto: createCustomerDTO) {
+    const existEmailCustomer = await this.customerRepository.findOne({
+      where: {
+        email: dto.email,
+      },
+    });
+
+    if (existEmailCustomer) {
+      throw new ErrorException(
+        'Email này đã được đăng ký trước đó, vui lòng đổi email khác',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const existPhoneCustomer = await this.customerRepository.findOne({
+      where: {
+        phone_number: dto.phone_number,
+      },
+    });
+
+    if (existPhoneCustomer) {
+      throw new ErrorException(
+        'Số điện thoại này đã được đăng ký trước đó, vui lòng đổi số khác',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const hash = await this.hashData(dto.password);
-    const customerType = await this.customerTypeService.getCustomerType(
-      dto.customer_type_id,
+    const customerType = await this.customerTypeService.getCustomerTypeByName(
+      dto.customer_type_name,
     );
     const newUser = this.customerRepository.create({
       ...dto,
       password: hash,
       customerType,
     });
-    console.log(
-      '🚀 ~ file: auth.service.ts:59 ~ AuthService ~ signupLocal ~ newUser:',
-      newUser,
-    );
+
     const result = await this.customerRepository.save(newUser);
     const tokens = await this.getTokens(
       result.customer_id,
@@ -82,7 +105,9 @@ export class AuthService {
       dto.email,
     );
     await this.updateRtHash(result.customer_id, tokens.refresh_token);
-    return tokens;
+    return {
+      message: 'Đăng ký thành công',
+    };
   }
 
   // sign up staff

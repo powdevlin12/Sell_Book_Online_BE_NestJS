@@ -141,6 +141,10 @@ export class CartService {
   }
 
   async getAllCartForCustomer(idCustomer: string) {
+    console.log(
+      '🚀 ~ file: cart.service.ts:144 ~ CartService ~ getAllCartForCustomer ~ idCustomer:',
+      idCustomer,
+    );
     const cart = await this.cartRepository.findOne({
       where: {
         customer: {
@@ -151,6 +155,7 @@ export class CartService {
       relations: ['cartDetail', 'cartDetail.book'],
     });
 
+    console.log(cart);
     return cart;
   }
 

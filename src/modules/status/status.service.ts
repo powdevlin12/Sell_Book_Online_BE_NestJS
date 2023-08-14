@@ -15,4 +15,9 @@ export class StatusService {
     const status = await this.statusRepository.save(body);
     return status;
   }
+
+  async getAllStatus() {
+    const status = await this.statusRepository.find();
+    return status;
+  }
 }

@@ -1,4 +1,11 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+} from '@nestjs/common';
 import { StatusService } from './status.service';
 import { CreateStatusDTO } from './dto/create-status.dto';
 
@@ -9,5 +16,11 @@ export class StatusController {
   @HttpCode(HttpStatus.OK)
   createStatus(@Body() body: CreateStatusDTO) {
     return this.statusService.createStatus(body);
+  }
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  getAllStatus() {
+    return this.statusService.getAllStatus();
   }
 }

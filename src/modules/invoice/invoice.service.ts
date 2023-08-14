@@ -85,6 +85,7 @@ export class InvoiceService {
         },
         {
           quantity_in_stock: book.quantity_in_stock - quantity,
+          quantity_sold: book.quantity_sold + quantity,
         },
       );
       return updateBook;
@@ -169,6 +170,7 @@ export class InvoiceService {
         'invoice.cart.cartDetail',
         'invoice.receiptInformation',
         'invoice.cart.cartDetail.book',
+        'invoice.cart.cartDetail.rate',
         'staff',
         'status',
       ],
@@ -211,6 +213,22 @@ export class InvoiceService {
       );
 
       return updateStatus;
+    } catch (error) {
+      console.log(error);
+      throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async getAllInvoiceForStaff() {
+    try {
+      const statusInvoice = await this.statusInvoiceRepository.find({
+        relations: [
+          'status',
+          'invoice.receiptInformation',
+          'invoice.cart.cartDetail.book',
+        ],
+      });
+      return statusInvoice;
     } catch (error) {
       console.log(error);
       throw new ErrorException(error.message, HttpStatus.BAD_REQUEST);

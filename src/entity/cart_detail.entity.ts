@@ -3,10 +3,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Cart } from './cart.entity';
 import { Book } from './book.entity';
+import { Rate } from './rate.entity';
 
 @Entity('cart_detail')
 export class CartDetail {
@@ -29,4 +31,8 @@ export class CartDetail {
   @ManyToOne(() => Book, (book) => book.cartDetail, { cascade: ['remove'] })
   @JoinColumn({ name: 'book_id' })
   book: Book;
+
+  @OneToOne(() => Rate, (rate) => rate.cartDetail)
+  @JoinColumn({ name: 'rate_id' })
+  rate: Rate;
 }

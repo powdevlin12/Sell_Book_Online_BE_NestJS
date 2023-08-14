@@ -1,4 +1,11 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+} from '@nestjs/common';
 import { CustomerTypeService } from './customer-type.service';
 import { CreateCustomerTypeDTO } from './dto/create-customer-type.dto';
 
@@ -10,5 +17,11 @@ export class CustomerTypeController {
   @HttpCode(HttpStatus.OK)
   createCustomerType(@Body() body: CreateCustomerTypeDTO) {
     return this.customerTypeService.createCustomerType(body);
+  }
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  getAllCustomerType() {
+    return this.customerTypeService.getAllCustomerType();
   }
 }

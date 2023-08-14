@@ -33,7 +33,18 @@ export class PromotionController {
     return this.promotionService.createPromotionCustomer(body);
   }
 
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  getAllPromotions() {
+    return this.promotionService.getAllPromotion();
+  }
+
   @Get('/customer-type')
+  getAllCustomerTypeValid() {
+    return this.promotionService.getAllPromotionCustomerValid();
+  }
+
+  @Get('/customer-type/all')
   getAllCustomerType() {
     return this.promotionService.getAllPromotionCustomer();
   }

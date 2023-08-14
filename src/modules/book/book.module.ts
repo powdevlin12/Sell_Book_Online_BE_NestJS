@@ -6,6 +6,7 @@ import { BookService } from './book.service';
 import { BookTypeModule } from '../book_type/book_type.module';
 import { PublisherModule } from '../publisher/publisher.module';
 import { AuthorModule } from '../author/author.module';
+import { CartDetailModule } from '../cart-detail/cart-detail.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { AuthorModule } from '../author/author.module';
     BookTypeModule,
     PublisherModule,
     AuthorModule,
+    CartDetailModule,
   ],
   controllers: [BookController],
   providers: [BookService],

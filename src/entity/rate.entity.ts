@@ -3,9 +3,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Book } from './book.entity';
+import { Customer } from './customer.entity';
+import { CartDetail } from './cart_detail.entity';
 
 @Entity('rate')
 export class Rate {
@@ -18,7 +21,6 @@ export class Rate {
   @Column({ type: 'int' })
   star: number;
 
-  @ManyToOne(() => Book, (book) => book.rates)
-  @JoinColumn({ name: 'book_id' })
-  book: Book;
+  @OneToOne(() => CartDetail, (cartDetail) => cartDetail.rate)
+  cartDetail: CartDetail;
 }

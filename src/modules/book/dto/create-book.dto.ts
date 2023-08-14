@@ -21,7 +21,7 @@ export class CreateBookDTO {
   @IsNumber()
   price: number;
 
-  @IsDate()
+  @IsString()
   @IsOptional()
   release_year: Date;
 
