@@ -298,11 +298,11 @@ export class BookService {
         }
       }
       for (const result of results) {
-        if (result.book.total_rate !== 0) {
+        if (result.book.quantity_sold !== 0) {
           result.score =
             result.score +
-            result.book.total_star / result.book.total_rate +
-            result.book.quantity_sold / 100;
+            (result.book.total_star * result.book.total_rate) /
+              result.book.quantity_sold;
         }
       }
       results.sort((a, b) => b.score - a.score);

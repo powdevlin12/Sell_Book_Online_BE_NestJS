@@ -37,5 +37,5 @@ export class createCustomerDTO {
 
   @IsString()
   @MaxLength(36)
-  customer_type_id: string;
+  customer_type_name: string;
 }
