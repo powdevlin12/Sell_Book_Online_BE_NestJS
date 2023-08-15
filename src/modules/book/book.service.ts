@@ -247,10 +247,10 @@ export class BookService {
   async searchByRate(query: string) {
     const results = [];
     const weight = {
-      bookName: 5,
-      typeBook: 4,
-      author: 3,
-      publisher: 2,
+      bookName: 2,
+      typeBook: 1,
+      author: 1,
+      publisher: 1,
       yearRelease: 1,
     };
     try {
