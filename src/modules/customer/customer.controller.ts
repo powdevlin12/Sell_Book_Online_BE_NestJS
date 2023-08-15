@@ -1,8 +1,10 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
   Req,
   UseGuards,
@@ -10,6 +12,7 @@ import {
 import { Request } from 'express';
 import { CustomerService } from './customer.service';
 import { AuthGuard } from '@nestjs/passport';
+import { ChangeCustomerTypeDTO } from './dto/changeCustomerType.dto';
 
 @Controller('customer')
 export class CustomerController {
@@ -25,5 +28,17 @@ export class CustomerController {
       user,
     );
     return this.customerService.getMySelf(user['userId']);
+  }
+
+  @Get('/all')
+  @HttpCode(HttpStatus.OK)
+  getAllCustomer() {
+    return this.customerService.getAllCustomer();
+  }
+
+  @Patch()
+  @HttpCode(HttpStatus.OK)
+  changeCustomerType(@Body() body: ChangeCustomerTypeDTO) {
+    return this.customerService.changeCustomerType(body);
   }
 }

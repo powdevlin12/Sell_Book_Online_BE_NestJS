@@ -32,7 +32,12 @@ export class CustomerTypeService {
   }
 
   async getAllCustomerType() {
-    const customerType = await this.customerTypeRepository.find();
+    const customerType = await this.customerTypeRepository.find({
+      relations: {
+        customers: true,
+        promotion_customers: true,
+      },
+    });
     return customerType;
   }
 }
