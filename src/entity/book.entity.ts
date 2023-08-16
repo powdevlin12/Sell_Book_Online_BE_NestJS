@@ -38,6 +38,9 @@ export class Book {
   @Column({ type: 'date', nullable: true })
   release_year: Date;
 
+  @Column({ type: 'date', nullable: true })
+  image: string;
+
   @Column({ type: 'int' })
   quantity_in_stock: number;
 

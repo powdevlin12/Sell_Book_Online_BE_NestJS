@@ -1,8 +1,18 @@
-import { Body, Controller, Post, Param, Get } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Param,
+  Get,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { CreateBookDTO } from './dto/create-book.dto';
 import { BookService } from './book.service';
 import { SearchBookByAttributesDTO } from './dto/search-attribute.dto';
 import { SearchBookByAttributesAdvancedDTO } from './dto/search-attribute-advanced.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { storageConfig } from 'src/config/config';
 
 @Controller('book')
 export class BookController {
@@ -10,6 +20,22 @@ export class BookController {
   @Post()
   createBook(@Body() body: CreateBookDTO) {
     return this.bookService.createBook(body);
+  }
+
+  // update image book
+  @Post('upload-image/:id')
+  @UseInterceptors(FileInterceptor('image', { storage: storageConfig('book') }))
+  uploadImage(
+    @UploadedFile() file: Express.Multer.File,
+    @Param('id') id: string,
+  ) {
+    console.log('uploading image');
+    console.log(file);
+
+    return this.bookService.updateImage(
+      id,
+      file.destination + '/' + file.filename,
+    );
   }
 
   @Get()

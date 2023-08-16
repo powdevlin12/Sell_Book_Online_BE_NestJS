@@ -72,6 +72,11 @@ export class BookService {
     return null;
   }
 
+  // update image
+  async updateImage(id: string, image: string) {
+    return await this.bookRepository.update(id, { image });
+  }
+
   // SEARCH BOOK
   // Search by attributes
   async searchBookByAttributes(body: SearchBookByAttributesDTO) {

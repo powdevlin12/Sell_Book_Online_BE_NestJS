@@ -38,6 +38,8 @@ import { CustomerTypeModule } from './modules/customer-type/customer-type.module
 import { StatusModule } from './modules/status/status.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
 import { InvoiceModule } from './modules/invoice/invoice.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -86,6 +88,14 @@ import { InvoiceModule } from './modules/invoice/invoice.module';
     StatusModule,
     PromotionModule,
     InvoiceModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
+      serveStaticOptions: {
+        index: false,
+        extensions: ['jpg', 'jpeg', 'png', 'gif'], // Các phần mở rộng tệp tin hình ảnh hỗ trợ
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
