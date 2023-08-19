@@ -6,6 +6,7 @@ import {
   Get,
   UploadedFile,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { CreateBookDTO } from './dto/create-book.dto';
 import { BookService } from './book.service';
@@ -61,7 +62,7 @@ export class BookController {
     @Body() body: SearchBookByAttributesAdvancedDTO,
   ) {
     console.log(
-      '🚀 ~ file: book.controller.ts:37 ~ BookController ~ body:',
+      '🚀 ~ file: book.controller.ts:64 ~ BookController ~ body:',
       body,
     );
     return this.bookService.searchBookByAttributesAdvanced(body);

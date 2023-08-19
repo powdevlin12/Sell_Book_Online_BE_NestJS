@@ -146,15 +146,26 @@ export class BookService {
   async searchBookByAttributesAdvanced(
     body: SearchBookByAttributesAdvancedDTO,
   ) {
-    const { author, bookName, publisher, typeBook, yearRelease } = body;
+    const {
+      author,
+      bookName,
+      publisher,
+      typeBook,
+      yearRelease,
+      w_bookName,
+      w_typeBook,
+      w_publisher,
+      w_yearRelease,
+      w_author,
+    } = body;
     // const { query } = body;
     const results = [];
     const weight = {
-      bookName: 5,
-      typeBook: 4,
-      author: 3,
-      publisher: 2,
-      yearRelease: 1,
+      bookName: Number.parseInt(w_bookName) ?? 2,
+      typeBook: Number.parseInt(w_typeBook) ?? 1,
+      author: Number.parseInt(w_publisher) ?? 1,
+      publisher: Number.parseInt(w_author) ?? 1,
+      yearRelease: Number.parseInt(w_yearRelease) ?? 1,
     };
     try {
       const books = await this.findAllBooks();
@@ -207,6 +218,10 @@ export class BookService {
         }
       }
       results.sort((a, b) => b.score - a.score);
+      console.log(
+        '🚀 ~ file: book.service.ts:221 ~ BookService ~ results:',
+        results,
+      );
       return results;
     } catch (error) {
       console.log(error);
