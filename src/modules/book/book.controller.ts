@@ -14,6 +14,7 @@ import { SearchBookByAttributesDTO } from './dto/search-attribute.dto';
 import { SearchBookByAttributesAdvancedDTO } from './dto/search-attribute-advanced.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { storageConfig } from 'src/config/config';
+import { LoggingInterceptor } from 'src/common/interceptor/logging.interceptor';
 
 @Controller('book')
 export class BookController {
