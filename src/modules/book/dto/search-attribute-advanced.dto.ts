@@ -7,7 +7,15 @@ export class SearchBookByAttributesAdvancedDTO {
 
   @IsString()
   @IsOptional()
+  w_bookName: string;
+
+  @IsString()
+  @IsOptional()
   typeBook: string;
+
+  @IsString()
+  @IsOptional()
+  w_typeBook: string;
 
   @IsString()
   @IsOptional()
@@ -15,9 +23,21 @@ export class SearchBookByAttributesAdvancedDTO {
 
   @IsString()
   @IsOptional()
+  w_publisher: string;
+
+  @IsString()
+  @IsOptional()
   yearRelease: string;
 
   @IsString()
   @IsOptional()
+  w_yearRelease: string;
+
+  @IsString()
+  @IsOptional()
   author: string;
+
+  @IsString()
+  @IsOptional()
+  w_author: string;
 }
